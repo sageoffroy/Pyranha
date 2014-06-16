@@ -1,11 +1,15 @@
 import sys
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
-from PyQt4.QtWebKit import *
-from urllib.request import urlopen
-#from urllib2 import urlopen
+from PyQt4.QtWebKit import*
+from PyQt4.QtTest import *
+
+#from urllib.request import urlopen
+from urllib2 import urlopen
 
 import os
+
+from QKeyboardPyranha import QKeyboardPyranha
 
 
 JQUERY_URL = 'http://code.jquery.com/jquery-1.11.0.min.js'
@@ -20,7 +24,6 @@ def getJquery(jquery_url=JQUERY_URL, jquery_path=JQUERY_PATH):
             f.write(jquery)
             f.close()
         else:
-            print("Existe")
             f = open(jquery_path)
             jquery = f.read()
             f.close()
@@ -38,21 +41,32 @@ class QPyranhaWebView(QWebView):
 
     def __init__(self):
         QWebView.__init__(self)
+        self.settings().setAttribute(QWebSettings.PluginsEnabled, True)
+        #Form.setStyleSheet(_fromUtf8("color:#3ea700")) VERDE
+        #self.modeButtonNum.setStyleSheet(_fromUtf8("color:#ff0000")) ROJO
+        #self.modeButtonMedia.setStyleSheet(_fromUtf8("color:#fd750f")) NARANJA
+        #self.modeButtonF.setStyleSheet(_fromUtf8("color:#ff0000")) ROJO
+        #self.modeButtonWeb.setStyleSheet(_fromUtf8("color:#2496b6")) TURQUESA
 
-
-
+class MyLineEdit(QLineEdit):
+    def __init__(self, *args):
+        QLineEdit.__init__(self, *args)
+        
+        
+    
 class PyranhaBrowser(QMainWindow):
 
     def __init__(self):
         QMainWindow.__init__(self)
-        self.resize(1024, 720)
-        self.setWindowIcon(QIcon('img/logo2.png'))
+        self.resize(1024, 800)
+        self.setWindowIcon(QIcon('img/logo5.png'))
         self.setWindowTitle('Pyranha Browser')
         self.default_url="http://www.google.com.ar"
         self.initGui()
         self.loadHome()
         self.jquery = getJquery()
         self.funcionesJs=getFuncionesJs()
+        self.resizeEvent = self.onResize
 
     def initGui(self):
         self.centralwidget = QWidget(self)
@@ -60,14 +74,32 @@ class PyranhaBrowser(QMainWindow):
         self.mainLayout.setMargin(0)
         self.mainLayout.setSpacing(0)
         self.createTabBar()
+        
+        self.keyboard = QKeyboardPyranha(self)
+        self.mainLayout.addWidget(self.keyboard)
+        self.centerWidget(self.mainLayout, self.keyboard)
+       
         #self.createNavBar()
         self.setCss()
         self.setCentralWidget(self.centralwidget)
+        
+    def keyPressEvent(self, event):
+        if(event.isAutoRepeat()):
+            None
+        else:
+            if type(event) == QKeyEvent and event.key() == Qt.Key_AltGr: 
+                print("Virtual click")
+                self.keyboard.click()
+            else:
+                QLineEdit.keyPressEvent(self.focusWidget(), event)
+        
+    def onResize(self, event):
+        self.centerWidget(self.tabLayout, self.keyboard)
 
     def loadHome(self):
-        self.createTab(self.default_url)
-        #self.createTab("https://www.facebook.com")
-        #self.createTab("http://www.ole.com.ar")
+        #self.createTab(self.default_url)
+        self.createTab("https://www.facebook.com")
+        self.createTab("http://www.ole.com.ar")
         #self.createTab("http://www.tekoavirtual.chubut.edu.ar")
         #self.createTab("http://www.chubut.edu.ar")
 
@@ -84,11 +116,11 @@ class PyranhaBrowser(QMainWindow):
         self.mainLayout.addWidget(self.tabBarWidget)
 
     def createTab(self, url):
-        tabLayout = QVBoxLayout()
-        tabLayout.setMargin(0)
-        tabLayout.setSpacing(0)
+        self.tabLayout = QVBoxLayout()
+        self.tabLayout.setMargin(0)
+        self.tabLayout.setSpacing(0)
         tab = QWidget()
-        tab.setLayout(tabLayout)
+        tab.setLayout(self.tabLayout)
 
         #-- Creando NavBar
         navBar = QWidget()
@@ -101,7 +133,7 @@ class PyranhaBrowser(QMainWindow):
         stopButton.setIcon(QIcon('img/stopLoad5.png'))
         buttonGO = QToolButton()
         buttonGO.setIcon(QIcon('img/goGo5.png'))
-        urlBox = QLineEdit()
+        self.urlBox = MyLineEdit()
 
         navBarLayout = QHBoxLayout()
         navBarLayout.setMargin(0)
@@ -109,23 +141,32 @@ class PyranhaBrowser(QMainWindow):
         navBarLayout.addWidget(backButton)
         navBarLayout.addWidget(nextButton)
         navBarLayout.addWidget(stopButton)
-        navBarLayout.addWidget(urlBox)
+        navBarLayout.addWidget(self.urlBox)
         navBarLayout.addWidget(buttonGO)
         navBar.setLayout(navBarLayout)
-
-        tabLayout.addWidget(navBar)
+        
+        self.tabLayout.addWidget(navBar)
 
         #-- Creando la vista Web
         self.web = QPyranhaWebView()
-        tabLayout.addWidget(self.web)
-
+        self.tabLayout.addWidget(self.web)
+        
+        #-- Cargando keyboard
+        #self.keyboardLayout=QHBoxLayout()
+        #self.keyboardLayout.setMargin(0)
+        #self.keyboardLayout.setSpacing(0)
+        ##tabLayout.addLayout(self.keyboardLayout)
+        #print (self.width())
+        #print (self.height())
+        
+        
         #-- Signals
-        urlBox.returnPressed.connect(lambda: self.loadURL(self.web, urlBox.displayText()))
-        buttonGO.clicked.connect(lambda: self.loadURL(self.web, urlBox.displayText()))
-        backButton.clicked.connect(lambda: self.goBack(self.web, urlBox))
-        nextButton.clicked.connect(lambda: self.goBack(self.web, urlBox))
+        self.urlBox.returnPressed.connect(lambda: self.loadURL(self.web, self.urlBox.displayText()))
+        buttonGO.clicked.connect(lambda: self.loadURL(self.web, self.urlBox.displayText()))
+        backButton.clicked.connect(lambda: self.goBack(self.web, self.urlBox))
+        nextButton.clicked.connect(lambda: self.goBack(self.web, self.urlBox))
         #stopButton.clicked.connect(self.stopLoad)
-        self.web.loadFinished.connect(lambda:self.loadFinished(self.web,urlBox))
+        self.web.loadFinished.connect(lambda:self.loadFinished(self.web,self.urlBox))
         self.web.linkClicked.connect(self.handleLinkClicked)
 
         #web.urlChanged.connect(self.updateUrlBox)
@@ -134,10 +175,12 @@ class PyranhaBrowser(QMainWindow):
         self.web.load(QUrl(str(url)))
 
         #Set Focus URL Box
-        urlBox.setFocus()
-        urlBox.selectAll()
+        self.urlBox.setFocus()
+        self.urlBox.selectAll()
 
-
+    def centerWidget(self, layout, widget):
+        layout.setAlignment(widget, Qt.AlignCenter)
+    
     def closeTab(self, num):
         self.tabBarWidget.removeTab(num)
 
@@ -165,7 +208,7 @@ class PyranhaBrowser(QMainWindow):
             self.setWindowTitle("Pyranha  " + child.title())
             self.tabBarWidget.setTabText(self.tabBarWidget.currentIndex(),str)
 
-        doc = web.page().mainFrame().documentElement()
+        #doc = web.page().mainFrame().documentElement()
 
         web.page().mainFrame().evaluateJavaScript(self.jquery)
         web.page().mainFrame().evaluateJavaScript(self.funcionesJs)
@@ -201,7 +244,7 @@ class PyranhaBrowser(QMainWindow):
             self.tabWidget.setTabText(tab,self.tabWidget.widget(tab).title())"""
 
 
-    """ Aca se debería mostrar el teclado """
+    """ Aca se deberia mostrar el teclado """
     def showKeyboard(self):
         print("Mostrar Teclado")
 
@@ -249,7 +292,14 @@ class PyranhaBrowser(QMainWindow):
         url = url.toString()
         url = str(url)
         self.urlBox.setText(url)
-
+        
+        
+        
+    
+        
+       
+        
+        
     #---- set Style Css ----- #
     def setCss(self):
         #-- Fondo:             #46483E
@@ -263,7 +313,7 @@ class PyranhaBrowser(QMainWindow):
         QToolTip
         {
              border: 1px solid black;
-             background-color: #ffa02f;
+             /*background-color: #ffa02f;*/
              padding: 1px;
              border-radius: 3px;
              opacity: 100;
@@ -271,7 +321,7 @@ class PyranhaBrowser(QMainWindow):
 
         QWidget
         {
-            color: #b1b1b1;
+            /*color: #b1b1b1;*/
             /*background-color: #323232;*/
         }
 
@@ -283,7 +333,7 @@ class PyranhaBrowser(QMainWindow):
 
         QWidget:item:selected
         {
-            background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ffa02f, stop: 1 #d7801a);
+            /*background-color: QLinearGradient( x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #ffa02f, stop: 1 #d7801a);*/
         }
 
         QWidget:disabled
@@ -316,7 +366,6 @@ class PyranhaBrowser(QMainWindow):
         QToolButton
         {
             background: transparent;
-
         }
 
 
@@ -354,7 +403,7 @@ class PyranhaBrowser(QMainWindow):
         {
 
             /*background-color: QLinearGradient(x1:0, y1:0, x2:0, y2:1, stop:0 #d7801a, stop:0.5 #b56c17 stop:1 #ffa02f);*/
-            background-color: #323232;
+            
             color: white;
             padding-left: 4px;
             border: 1px solid #6c6c6c;
