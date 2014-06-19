@@ -1,8 +1,8 @@
 from QKeyboardButton import QKeyboardButton
 
-class QModeButton(QKeyboardButton):
+class QMouseButton(QKeyboardButton):
     
-    mode = ""
+    action = ""
     
     def __init__ (self, parent):
         QKeyboardButton.__init__(self,parent)

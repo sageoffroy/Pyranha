@@ -9,4 +9,7 @@ class QKeyboardButton(QPushButton):
     def __init__ (self, parent):
         QPushButton.__init__(self, parent)
         self.setFocusPolicy(Qt.NoFocus)
-        
+    
+    
+    '''def virtualClicked(self):
+        self.clicked()  '''

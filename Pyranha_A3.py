@@ -41,7 +41,7 @@ class QPyranhaWebView(QWebView):
 
     def __init__(self):
         QWebView.__init__(self)
-        self.settings().setAttribute(QWebSettings.PluginsEnabled, True)
+        #self.settings().setAttribute(QWebSettings.PluginsEnabled, True)
         #Form.setStyleSheet(_fromUtf8("color:#3ea700")) VERDE
         #self.modeButtonNum.setStyleSheet(_fromUtf8("color:#ff0000")) ROJO
         #self.modeButtonMedia.setStyleSheet(_fromUtf8("color:#fd750f")) NARANJA
@@ -67,6 +67,7 @@ class PyranhaBrowser(QMainWindow):
         self.jquery = getJquery()
         self.funcionesJs=getFuncionesJs()
         self.resizeEvent = self.onResize
+        self.activeKey = False;
 
     def initGui(self):
         self.centralwidget = QWidget(self)
@@ -88,7 +89,7 @@ class PyranhaBrowser(QMainWindow):
             None
         else:
             if type(event) == QKeyEvent and event.key() == Qt.Key_AltGr: 
-                print("Virtual click")
+                print("Pulsador")
                 self.keyboard.click()
             else:
                 QLineEdit.keyPressEvent(self.focusWidget(), event)
@@ -98,8 +99,8 @@ class PyranhaBrowser(QMainWindow):
 
     def loadHome(self):
         #self.createTab(self.default_url)
-        self.createTab("https://www.facebook.com")
-        self.createTab("http://www.ole.com.ar")
+        self.createTab("https://www.google.com")
+        #self.createTab("http://www.ole.com.ar")
         #self.createTab("http://www.tekoavirtual.chubut.edu.ar")
         #self.createTab("http://www.chubut.edu.ar")
 
