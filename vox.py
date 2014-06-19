@@ -1,0 +1,65 @@
+import requests
+from pyaudio import PyAudio, paInt16
+from wave import open as open_audio
+from os import system
+from json import loads
+
+
+class Vox:
+  
+    
+    
+    def __init__(self, file="audio"):
+        self.format = paInt16
+        #self.rate = 48000
+        self.rate = 16000
+        self.channel = 1
+        self.chunk = 1024
+        self.file = file
+        #final es una palabra reservada para nosotros
+        self.IGNORE = ['confidence','transcript','result_index','final',':true}],',':0}\n','}],',':','},{','{','']
+
+    def record(self, time, device_i=None):
+        audio = PyAudio()
+        print audio.get_device_info_by_index(1)
+        stream = audio.open(input_device_index=device_i,output_device_index=device_i,format=self.format, channels=self.channel,
+                            rate=self.rate, input=True,
+                            frames_per_buffer=self.chunk)
+        print "REC: "
+        frames = []
+        for i in range(0, self.rate / self.chunk * time):
+            data = stream.read(self.chunk)
+            frames.append(data)
+        stream.stop_stream()
+        print "END"
+        stream.close()
+        audio.terminate()
+        write_frames = open_audio(self.file, 'wb')
+        write_frames.setnchannels(self.channel)
+        write_frames.setsampwidth(audio.get_sample_size(self.format))
+        write_frames.setframerate(self.rate)
+        write_frames.writeframes(''.join(frames))
+        write_frames.close()
+
+
+    def cadenas(self,lista):
+        """Metodo que toma la respuesta de la api de google y toma solo los resultados del reconocimiento de voz"""
+        listax = []
+        for l in lista:
+	    if l not in self.IGNORE and not(l.startswith(':'))and not(l.startswith(','))and not(l.startswith('{')):
+	        listax.append(l)
+	return listax
+
+    def voz_a_texto(self):
+        """Metodo para convertir grabaciones de voz a texto, usando la api de google a traves de internet"""
+        #rec --encoding signed-integer --bits 16 --channels 1 --rate 16000 test.wav
+        url = 'https://www.google.com/speech-api/v2/recognize?output=json&lang=es-ar&key=AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw'
+        audio = open('audio','rb').read()
+        headers = {'Content-Type': 'audio/l16; rate=16000;'}
+        respuesta = requests.post(url,data=audio,headers=headers)
+        listaux = respuesta.content.split('{"result":[]}\n{"result":[{"alternative":[{"transcript":')
+        listaux = listaux[1].split('"')
+        resultados = self.cadenas(listaux)
+        cadena = listaux[1]
+
+        return resultados
