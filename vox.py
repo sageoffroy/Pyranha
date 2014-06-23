@@ -66,23 +66,23 @@ class Vox:
         Metodo que realiza un analisis de la respuesta obtenida de convertir la voz a texto.
         Aqui se realiza un analisis de esta respuesta y si contiene un comando valido se ejecuta en consecuencia
         """
-        method='none'
+        opc=0
 	for r in rta:
             for c in commands:
                 if c in r:
                     if c == 'pesta':
                         print "Ejecutando comando: createTab(self, url)"
-                        return "createTab(self, url)"
+                        return 1
                     elif c == 'inicio':
 		        print "Ejecutando comando: loadHome(self)"
-		        return "loadHome(self)"
+		        return 2
 		    elif c == 'detener':
                         print "Ejecutando comando: stop(self)"
-                        return "stop(self)"
+                        return 3
                     elif c == 'recarga':
 		        print "Ejecutando comando: reload(self)"
-		        return "reload(self)"
-        return method
+		        return 4
+        return opc
       
     def start(self,commands):
         """

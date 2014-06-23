@@ -183,7 +183,22 @@ class PyranhaBrowser(QMainWindow):
         #Set Focus URL Box
         self.urlBox.setFocus()
         self.urlBox.selectAll()
-
+    
+    def commandHandler(self,opc,extra):
+        if opc == 1:
+	    if extra == '':
+	        self.createTab(self.default_url)
+	    else:
+	        self.createTab(extra)
+	elif opc == 2:
+	    self.loadHome()
+	elif opc == 3:
+	    self.stop()
+	elif opc == 4:
+	    self.reload()
+	else:
+	    print "No hay comando reconocido"
+    
     def centerWidget(self, layout, widget):
         layout.setAlignment(widget, Qt.AlignCenter)
     
