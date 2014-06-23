@@ -80,7 +80,7 @@ class Vox:
                         #stop(self)
                         return 3
                     elif c == 'recarga':
-		        "reload(self)
+		        #reload(self)
 		        return 4
         return opc
       
