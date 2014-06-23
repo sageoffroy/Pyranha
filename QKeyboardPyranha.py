@@ -318,6 +318,11 @@ class QKeyboardPyranha(QWidget):
     def modeButtonClicked(self):
         print(self.sender().mode + " clicked")
         self.mode = self.sender().mode+"3"
+        if self.sender().mode == "gear":
+	  #Aca tenes que hacer la voz
+	  self.browser.voice.start(["pesta"])
+	elif self.sender().mode == "mouse":
+            self.mode = "mouse3"
             
     def mediaButtonClicked(self):
         if self.sender().media == "play":

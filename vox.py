@@ -6,8 +6,6 @@ from json import loads
 
 
 class Vox:
-  
-    
     
     def __init__(self, file="audio"):
         self.format = paInt16
@@ -60,6 +58,39 @@ class Vox:
         listaux = respuesta.content.split('{"result":[]}\n{"result":[{"alternative":[{"transcript":')
         listaux = listaux[1].split('"')
         resultados = self.cadenas(listaux)
-        cadena = listaux[1]
-
         return resultados
+
+
+    def commandAnalysis(self,rta,commands):
+        """
+        Metodo que realiza un analisis de la respuesta obtenida de convertir la voz a texto.
+        Aqui se realiza un analisis de esta respuesta y si contiene un comando valido se ejecuta en consecuencia
+        """
+        method='none'
+	for r in rta:
+            for c in commands:
+                if c in r:
+                    if c == 'pesta':
+                        print "Ejecutando comando: createTab(self, url)"
+                        return "createTab(self, url)"
+                    elif c == 'inicio':
+		        print "Ejecutando comando: loadHome(self)"
+		        return "loadHome(self)"
+		    elif c == 'detener':
+                        print "Ejecutando comando: stop(self)"
+                        return "stop(self)"
+                    elif c == 'recarga':
+		        print "Ejecutando comando: reload(self)"
+		        return "reload(self)"
+        return method
+      
+    def start(self,commands):
+        """
+        Metodo que realiza la toma del audio, realiza una analisis sobre el mismo
+        y retorna un comando valido para la ejecucion o 'none' en caso contrario.
+        """
+        self.record(3)
+        rta = self.voz_a_texto()
+        return self.commandAnalysis(rta,commands)
+        
+    

@@ -67,11 +67,12 @@ class PyranhaBrowser(QMainWindow):
         self.setWindowTitle('Pyranha Browser')
         self.default_url="http://www.google.com.ar"
         self.initGui()
+        self.voice = Vox()
         self.loadHome()
         self.jquery = getJquery()
         self.funcionesJs=getFuncionesJs()
         self.resizeEvent = self.onResize
-        self.activeKey = False;
+        self.activeKey = False
 
     def initGui(self):
         self.centralwidget = QWidget(self)
@@ -88,9 +89,6 @@ class PyranhaBrowser(QMainWindow):
         self.setCss()
         self.setCentralWidget(self.centralwidget)
         
-        self.voice = Vox()
-        print "Se instancio VOX"
-        
     def keyPressEvent(self, event):
         if(event.isAutoRepeat()):
             None
@@ -103,37 +101,7 @@ class PyranhaBrowser(QMainWindow):
         
     def onResize(self, event):
         self.centerWidget(self.tabLayout, self.keyboard)
-        
-    def voice(self):
-        """
-        Metodo que inicia la captura de la voz del usuario. Este metodo requiere
-        de una conexion a internet
-        """
-        self.voice.record(3)
-        rta = self.voice.voz_a_texto()
-        commandAnalysis(rta)
-        
-    def commandAnalysis(rta):
-        """
-        Metodo que realiza un analisis de la respuesta obtenida de convertir la voz a texto.
-        Aqui se realiza un analisis de esta respuesta y si contiene un comando valido se ejecuta en consecuencia
-        """
-	for r in rta:
-            for c in COMMAND:
-                if c in r:
-                    exit = True
-                    if c == 'pesta':
-                        print "Ejecutando comando: createTab(self, url)"
-                    elif c == 'inicio':
-		        print "Ejecutando comando: loadHome(self)"
-		    elif c == 'detener'
-                        print "Ejecutando comando: stop(self)"
-                    elif c == 'recarga':
-		        print "Ejecutando comando: reload(self)"
-                    break
-            if exit:
-                break
-                
+            
     def loadHome(self):
         #self.createTab(self.default_url)
         self.createTab("https://www.google.com")
