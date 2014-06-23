@@ -320,7 +320,8 @@ class QKeyboardPyranha(QWidget):
         self.mode = self.sender().mode+"3"
         if self.sender().mode == "gear":
 	  #Aca tenes que hacer la voz
-	  opc = self.browser.voice.start(["pesta"])
+	  opc = self.browser.voice.start(self.browser.COMMAND)
+	  #opc = self.browser.handDetector.start()
 	  self.browser.commandHandler(opc,'')
 	elif self.sender().mode == "mouse":
             self.mode = "mouse3"
