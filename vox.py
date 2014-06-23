@@ -71,16 +71,16 @@ class Vox:
             for c in commands:
                 if c in r:
                     if c == 'pesta':
-                        print "Ejecutando comando: createTab(self, url)"
+                        #createTab(self, url)
                         return 1
                     elif c == 'inicio':
-		        print "Ejecutando comando: loadHome(self)"
+		        #loadHome(self)
 		        return 2
 		    elif c == 'detener':
-                        print "Ejecutando comando: stop(self)"
+                        #stop(self)
                         return 3
                     elif c == 'recarga':
-		        print "Ejecutando comando: reload(self)"
+		        "reload(self)
 		        return 4
         return opc
       
