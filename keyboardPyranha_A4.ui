@@ -847,6 +847,11 @@
      <height>35</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="text">
     <string>Ent</string>
    </property>
@@ -872,6 +877,11 @@
      <height>35</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="text">
     <string>Sup</string>
    </property>
@@ -879,7 +889,7 @@
   <widget class="QPushButton" name="modeButtonNum">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>200</x>
      <y>50</y>
      <width>35</width>
      <height>35</height>
@@ -900,11 +910,17 @@
     <iconset>
      <normaloff>img/modeNumber.png</normaloff>img/modeNumber.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="modeButtonSym">
    <property name="geometry">
     <rect>
-     <x>120</x>
+     <x>160</x>
      <y>50</y>
      <width>35</width>
      <height>35</height>
@@ -922,11 +938,17 @@
     <iconset>
      <normaloff>img/modeSymbol.png</normaloff>img/modeSymbol.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="modeButtonMouse">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>40</x>
      <y>50</y>
      <width>35</width>
      <height>35</height>
@@ -945,13 +967,19 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>img/mouse_c_l.png</normaloff>img/mouse_c_l.png</iconset>
+     <normaloff>img/mode_mouse.png</normaloff>img/mode_mouse.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
    </property>
   </widget>
-  <widget class="QPushButton" name="modeButtonF">
+  <widget class="QPushButton" name="modeButtonVoice">
    <property name="geometry">
     <rect>
-     <x>240</x>
+     <x>0</x>
      <y>50</y>
      <width>35</width>
      <height>35</height>
@@ -980,13 +1008,23 @@
     <string notr="true">color:#ff0000</string>
    </property>
    <property name="text">
-    <string>F?</string>
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset>
+     <normaloff>img/mode_voice.png</normaloff>img/mode_voice.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
    </property>
   </widget>
   <widget class="QPushButton" name="modeButtonWeb">
    <property name="geometry">
     <rect>
-     <x>80</x>
+     <x>120</x>
      <y>50</y>
      <width>35</width>
      <height>35</height>
@@ -1010,6 +1048,12 @@
     <iconset>
      <normaloff>img/modeWeb.png</normaloff>img/modeWeb.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="funButton_1_6">
    <property name="geometry">
@@ -1031,6 +1075,11 @@
      <width>35</width>
      <height>35</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>Esc</string>
@@ -1057,6 +1106,11 @@
      <height>35</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="text">
     <string>Ins</string>
    </property>
@@ -1081,6 +1135,11 @@
      <width>35</width>
      <height>35</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>Ctl</string>
@@ -1107,6 +1166,11 @@
      <height>35</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="text">
     <string>Alt</string>
    </property>
@@ -1131,6 +1195,11 @@
      <width>35</width>
      <height>35</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>May</string>
@@ -1157,6 +1226,11 @@
      <height>35</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="text">
     <string>Imp</string>
    </property>
@@ -1181,6 +1255,11 @@
      <width>35</width>
      <height>35</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="text">
     <string>Bsp</string>
@@ -1271,6 +1350,12 @@
     <iconset>
      <normaloff>img/web_zoom_out.png</normaloff>img/web_zoom_out.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="webButton_1_3">
    <property name="geometry">
@@ -1302,6 +1387,12 @@
    <property name="icon">
     <iconset>
      <normaloff>img/web_new_tab.png</normaloff>img/web_new_tab.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
    </property>
   </widget>
   <widget class="QPushButton" name="webButton_1_1">
@@ -1335,6 +1426,12 @@
     <iconset>
      <normaloff>img/web_go.png</normaloff>img/web_go.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="webButton_4_3">
    <property name="geometry">
@@ -1356,6 +1453,11 @@
      <width>35</width>
      <height>35</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="styleSheet">
     <string notr="true">color:#2496b6</string>
@@ -1394,6 +1496,12 @@
    <property name="icon">
     <iconset>
      <normaloff>img/web_home.png</normaloff>img/web_home.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
    </property>
   </widget>
   <widget class="QPushButton" name="webButton_3_2">
@@ -1460,6 +1568,12 @@
     <iconset>
      <normaloff>img/web_zoom_in.png</normaloff>img/web_zoom_in.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="webButton_4_4">
    <property name="geometry">
@@ -1481,6 +1595,11 @@
      <width>35</width>
      <height>35</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="styleSheet">
     <string notr="true">color:#2496b6</string>
@@ -1553,6 +1672,12 @@
     <iconset>
      <normaloff>img/web_setting.png</normaloff>img/web_setting.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="webButton_3_5">
    <property name="geometry">
@@ -1608,11 +1733,16 @@
      <height>35</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="styleSheet">
     <string notr="true">color:#2496b6</string>
    </property>
    <property name="text">
-    <string>3w</string>
+    <string>www</string>
    </property>
   </widget>
   <widget class="QPushButton" name="webButton_3_1">
@@ -1679,6 +1809,12 @@
     <iconset>
      <normaloff>img/web_right.png</normaloff>img/web_right.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="webButton_2_5">
    <property name="geometry">
@@ -1711,6 +1847,12 @@
     <iconset>
      <normaloff>img/web_reload.png</normaloff>img/web_reload.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="webButton_4_2">
    <property name="geometry">
@@ -1732,6 +1874,11 @@
      <width>35</width>
      <height>35</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="styleSheet">
     <string notr="true">color:#2496b6</string>
@@ -1771,6 +1918,12 @@
     <iconset>
      <normaloff>img/web_left.png</normaloff>img/web_left.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="webButton_1_4">
    <property name="geometry">
@@ -1802,6 +1955,12 @@
    <property name="icon">
     <iconset>
      <normaloff>img/web_stop.png</normaloff>img/web_stop.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
    </property>
   </widget>
   <widget class="QPushButton" name="webButton_3_4">
@@ -1868,6 +2027,12 @@
     <iconset>
      <normaloff>img/mouse_l_d.png</normaloff>img/mouse_l_d.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="mouseButton_r_u">
    <property name="geometry">
@@ -1899,6 +2064,12 @@
    <property name="icon">
     <iconset>
      <normaloff>img/mouse_r_u.png</normaloff>img/mouse_r_u.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
    </property>
   </widget>
   <widget class="QPushButton" name="mouseButton_r_d">
@@ -1932,6 +2103,12 @@
     <iconset>
      <normaloff>img/mouse_r_d.png</normaloff>img/mouse_r_d.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="mouseButton_u">
    <property name="geometry">
@@ -1963,6 +2140,12 @@
    <property name="icon">
     <iconset>
      <normaloff>img/mouse_u.png</normaloff>img/mouse_u.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
    </property>
   </widget>
   <widget class="QPushButton" name="mouseButton_d">
@@ -1996,6 +2179,12 @@
     <iconset>
      <normaloff>img/mouse_d.png</normaloff>img/mouse_d.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="mouseButton_l_u">
    <property name="geometry">
@@ -2027,6 +2216,12 @@
    <property name="icon">
     <iconset>
      <normaloff>img/mouse_l_u.png</normaloff>img/mouse_l_u.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
    </property>
   </widget>
   <widget class="QPushButton" name="mouseButton_r">
@@ -2060,6 +2255,12 @@
     <iconset>
      <normaloff>img/mouse_r.png</normaloff>img/mouse_r.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="moveButton_2_4">
    <property name="geometry">
@@ -2091,6 +2292,12 @@
    <property name="icon">
     <iconset>
      <normaloff>img/Arrow2 - Down.png</normaloff>img/Arrow2 - Down.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
    </property>
   </widget>
   <widget class="QPushButton" name="moveButton_2_2">
@@ -2124,6 +2331,12 @@
     <iconset>
      <normaloff>img/Arrow2 - Right.png</normaloff>img/Arrow2 - Right.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="moveButton_2_1">
    <property name="geometry">
@@ -2155,6 +2368,12 @@
    <property name="icon">
     <iconset>
      <normaloff>img/Arrow2 - Left.png</normaloff>img/Arrow2 - Left.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
    </property>
   </widget>
   <widget class="QPushButton" name="webButton_back">
@@ -2220,6 +2439,12 @@
     <iconset>
      <normaloff>img/Arrow2 - Up.png</normaloff>img/Arrow2 - Up.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="mouseButton_c">
    <property name="geometry">
@@ -2252,6 +2477,12 @@
     <iconset>
      <normaloff>img/mouse_c.png</normaloff>img/mouse_c.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="mouseButton_l">
    <property name="geometry">
@@ -2283,6 +2514,12 @@
    <property name="icon">
     <iconset>
      <normaloff>img/mouse_l.png</normaloff>img/mouse_l.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
    </property>
   </widget>
   <widget class="QPushButton" name="mouseButton_back">
@@ -2842,6 +3079,12 @@
     <iconset>
      <normaloff>img/mouse_c_l.png</normaloff>img/mouse_c_l.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="mouseButton_c_r">
    <property name="geometry">
@@ -2873,6 +3116,12 @@
    <property name="icon">
     <iconset>
      <normaloff>img/mouse_c_r.png</normaloff>img/mouse_c_r.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
    </property>
   </widget>
   <widget class="QPushButton" name="moveButton_back">
@@ -2910,7 +3159,7 @@
   <widget class="QPushButton" name="modeButtonMove">
    <property name="geometry">
     <rect>
-     <x>40</x>
+     <x>80</x>
      <y>50</y>
      <width>35</width>
      <height>35</height>
@@ -2931,11 +3180,17 @@
     <iconset>
      <normaloff>img/modeMove.png</normaloff>img/modeMove.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
   <widget class="QPushButton" name="modeButtonEmot">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>240</x>
      <y>50</y>
      <width>35</width>
      <height>35</height>
@@ -2955,6 +3210,12 @@
    <property name="icon">
     <iconset>
      <normaloff>img/modeEmot.png</normaloff>img/modeEmot.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
    </property>
   </widget>
   <widget class="QPushButton" name="moveButton_1_3">
@@ -2977,6 +3238,11 @@
      <width>35</width>
      <height>35</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="styleSheet">
     <string notr="true">color:#5d4cab</string>
@@ -3006,6 +3272,11 @@
      <height>35</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="styleSheet">
     <string notr="true">color:#5d4cab</string>
    </property>
@@ -3033,6 +3304,11 @@
      <width>35</width>
      <height>35</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="styleSheet">
     <string notr="true">color:#5d4cab</string>
@@ -3062,6 +3338,11 @@
      <height>35</height>
     </size>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
    <property name="styleSheet">
     <string notr="true">color:#5d4cab</string>
    </property>
@@ -3089,6 +3370,11 @@
      <width>35</width>
      <height>35</height>
     </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <property name="styleSheet">
     <string notr="true">color:#5d4cab</string>
@@ -3135,8 +3421,14 @@
     <iconset>
      <normaloff>img/Standby.png</normaloff>img/Standby.png</iconset>
    </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
+   </property>
   </widget>
-  <widget class="QPushButton" name="modeButtonGear">
+  <widget class="QPushButton" name="modeButtonHand">
    <property name="geometry">
     <rect>
      <x>280</x>
@@ -3172,7 +3464,13 @@
    </property>
    <property name="icon">
     <iconset>
-     <normaloff>img/Gears.png</normaloff>img/Gears.png</iconset>
+     <normaloff>img/mode_hand.png</normaloff>img/mode_hand.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>20</width>
+     <height>20</height>
+    </size>
    </property>
   </widget>
  </widget>

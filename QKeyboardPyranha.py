@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 from operator import itemgetter
 from PyQt4.QtGui import QWidget, QApplication, QCursor
-from keyboardMousePyranha import Ui_Form
+from keyboardPyranha import Ui_Form
 from PyQt4.QtCore import Qt, QTimer, QPoint
 from PyQt4.QtTest import QTest
 
@@ -88,7 +88,7 @@ class QKeyboardPyranha(QWidget):
         self.activeClick = False
         self.currentKey = None
         #self.setDefaultStyle(self.arrow3)
-        self.setArrayStyle(self.predectiveLineEditArray)
+        self.setArrayStyle(self.predectiveLineEditArray,'red')
         self.timer = QTimer()
         self.timer.timeout.connect(self.tick)
         self.timer.start(2000)
@@ -99,130 +99,102 @@ class QKeyboardPyranha(QWidget):
         self.mouseStop = False
         
     def setKeyStyleSheet(self):
-        self.setDefaultStyle(self.predectiveLineEditArray)
-        self.setDefaultStyle(self.mouseButtonArray)
-        self.setDefaultStyle(self.moveButtonArray)
-        self.setDefaultStyle(self.webButtonArray)
-        self.setDefaultStyle(self.numButtonArray)
-        self.setDefaultStyle(self.modeButtonArray)
-        self.setDefaultStyle(self.funButtonArray)
-        self.setDefaultStyle(self.charButtonArray)
+        self.setArrayStyle(self.predectiveLineEditArray)
+        self.setArrayStyle(self.mouseButtonArray)
+        self.setArrayStyle(self.moveButtonArray)
+        self.setArrayStyle(self.webButtonArray)
+        self.setArrayStyle(self.numButtonArray)
+        self.setArrayStyle(self.modeButtonArray)
+        self.setArrayStyle(self.funButtonArray)
+        self.setArrayStyle(self.charButtonArray)
     
         
     def click(self):
-        if (self.activeClick):
-            print ("Segundo Click")
-            self.activeClick = False
-            print(self.currentKey)
+        if (self.currentKey == self.keyboardUI.mouseButton_c):
             self.currentKey.clicked.emit(True)
-            self.timer.timeout.disconnect(self.tick2)
-            self.timer.timeout.connect(self.tick)    
         else:
-            print ("Primer Click")
-            self.activeClick = True
-            self.timer.timeout.disconnect(self.tick)
-            self.timer.timeout.connect(self.tick2)
-        self.i = 0
+            if (self.activeClick):
+                print ("Segundo Click")
+                self.activeClick = False
+                print(self.currentKey)
+                self.currentKey.clicked.emit(True)
+                self.timer.timeout.disconnect(self.tick2)
+                self.timer.timeout.connect(self.tick)    
+            else:
+                print ("Primer Click")
+                self.activeClick = True
+                self.timer.timeout.disconnect(self.tick)
+                self.timer.timeout.connect(self.tick2)
+            self.i = 0
     
     def tick(self):
         print("tick")
-        self.setDefaultStyle(self.array)
+        self.setArrayStyle(self.array)
         
         if(self.mode == "char1"):
             print("Char 2")
             self.mode = "char2"
-            self.setArrayStyle(self.modeButtonArray)
+            self.setArrayStyle(self.modeButtonArray,'red')
         elif (self.mode == "char2"):
             print("Char 3")
-            self.setArrayStyle(self.funButtonArray)
+            self.setArrayStyle(self.funButtonArray,'red')
             self.mode = "char3"
         elif (self.mode == "char3"):
             print("Char 4_1")
             self.mode = "char4_1"
-            self.setArrayStyle(self.charArrow1)
+            self.setArrayStyle(self.charArrow1,'red')
         elif (self.mode == "char4_1"):
             print("Char 4_2")
             self.mode = "char4_2"
-            self.setArrayStyle(self.charArrow2)
+            self.setArrayStyle(self.charArrow2,'red')
         elif (self.mode == "char4_2"):
             print("Char 4_3")
             self.mode = "char4_3"
-            self.setArrayStyle(self.charArrow3)
+            self.setArrayStyle(self.charArrow3,'red')
         elif (self.mode == "char4_3"):
             print("Char 1")
             self.mode = "char1"
-            self.setArrayStyle(self.predectiveLineEditArray)
+            self.setArrayStyle(self.predectiveLineEditArray,'red')
         elif (self.mode == "mouse1"):
             self.mouseStop = False
             print("mouse2")
             self.mode = "mouse2"
-            self.setArrayStyle(self.mouseArrow2)
+            self.setArrayStyle(self.mouseArrow2,'red')
         elif (self.mode == "mouse2"):
             print("mouse3")
             self.mode = "mouse3"
-            self.setArrayStyle(self.mouseArrow3)
+            self.setArrayStyle(self.mouseArrow3,'red')
         elif (self.mode == "mouse3"):
             print("mouse1")
             self.mode = "mouse1"
-            self.setArrayStyle(self.mouseArrow1)
-        elif (self.mode == "mouseMove"):
-            if (self.mouseStop):
-                self.mode = "mouse1"
-                self.setArrayStyle(self.mouseArrow1)
-            self.timer.stop()
-            self.setKeyStyle(self.keyboardUI.mouseButton_c)
-            self.click()
-            
+            self.setArrayStyle(self.mouseArrow1,'red')
             
     def tick2(self):
         print("tick 2")
         if (self.i > len(self.array)-1):
             
-            self.timer.timeout.disconnect(self.tick2)
+            #self.timer.timeout.disconnect(self.tick2)
             self.i = 0
-            self.timer.timeout.connect(self.tick)
+            #self.timer.timeout.connect(self.tick)
             self.mode = "char4_3"
-            self.setDefaultStyle(self.array)
+            self.setArrayStyle(self.array, 'white')
         
         else:
-            self.setArrayStyle(self.array)
+            self.setArrayStyle(self.array, 'red')
             self.currentKey = self.array[self.i] 
-            self.array[self.i].setStyleSheet('''
-                                color: #44d51C;
-                                border-radius: 8px;
-                                border-style: outset; 
-                                border-width: 1px;
-                                border-color:blue;
-                                background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #888888, stop: 0.1 #222222);    
-                                ''')
+            self.setKeyStyle(self.array[self.i], 'blue')
+            
             self.i+=1
         
     
-    def setDefaultStyle(self, array):
-        for widget in array:
-            widget.setStyleSheet('''
-                                color: #44d51C;
-                                border-radius: 8px;
-                                border-style: outset; 
-                                border-width: 1px;
-                                border-color:white;
-                                background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #888888, stop: 0.1 #222222);    
-                                ''')               
-        
-    def setArrayStyle(self, array):
-        #print("New Style for "+str(len(array)) + " keys" )
+    def setArrayStyle(self, array, border_color='white'):
         self.array = array
         for widget in array:
-            self.setKeyStyle(widget)
+            self.setKeyStyle(widget, border_color)
 
-    def setKeyStyle(self, w):
-        w.setStyleSheet(''' color: #44d51C;
-                            border-radius: 8px;
-                            border-style: outset;
-                            border-width: 1px;
-                            border-color:red;
-                            background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #888888, stop: 0.1 #222222);    
-                        ''')
+    def setKeyStyle(self, w, border_color='white'):
+        style = 'color:#44d51C;border-radius: 8px;border-style: outset;border-width: 1px;border-color:'+border_color+';background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #888888, stop: 0.1 #222222);'
+        w.setStyleSheet(style)
         
     
     def configMouseMode(self):
@@ -248,7 +220,10 @@ class QKeyboardPyranha(QWidget):
       
     def configMouseKeys(self):
         for key in self.mouseButtonArray:
-            key.clicked.connect(self.mouseButtonClicked)
+            if (key.accessibleName()=="back"):
+                key.clicked.connect(self.backButtonClicked)
+            else:
+                key.clicked.connect(self.mouseButtonClicked)
             
             
     def configModeKeys(self):
@@ -286,14 +261,18 @@ class QKeyboardPyranha(QWidget):
             key.clicked.connect(self.charButtonClicked)
     
     def mouseButtonClicked(self):
-        #print(self.sender().action + " clicked")
         act = self.sender().action
         self.mouseX = 0
         self.mouseY = 0
         self.mouseTimer.start(20)
+        self.timer.stop()
+        
+        self.setArrayStyle(self.array, 'white')
+        self.currentKey = self.keyboardUI.mouseButton_c
+        self.setKeyStyle(self.currentKey, 'blue')
+        
         if(act == "u"):
             self.mouseY = -1  
-            self.mode = "mouseMove"
         elif(act == "l"):
             self.mouseX = -1
         elif(act == "r"):
@@ -301,41 +280,21 @@ class QKeyboardPyranha(QWidget):
         elif(act == "d"):
             self.mouseY = 1
         elif(act == "c"):
+            self.timer.start(2000)
             self.mouseTimer.stop()
-            self.mouseStop = True
-            
-            
-        
-        
+            self.currentKey = None
         
     def mouseTick(self):
         self.mouseCursor = QCursor()
         self.mousePos = self.mouseCursor.pos()
         self.mouseCursor.setPos(QPoint(self.mousePos.x()+self.mouseX,self.mousePos.y()+self.mouseY))
         
-    
-    
     def modeButtonClicked(self):
         print(self.sender().mode + " clicked")
-        self.mode = self.sender().mode+"3"
-        if self.sender().mode == "gear":
-	  #Aca tenes que hacer la voz
-	  opc = self.browser.voice.start(self.browser.COMMAND)
-	  #opc = self.browser.handDetector.start()
-	  self.browser.commandHandler(opc,'')
-	elif self.sender().mode == "mouse":
-            self.mode = "mouse3"
-            
-    def mediaButtonClicked(self):
-        if self.sender().media == "play":
-            print("Media play presionada")
-            QTest.keyClick(self.browser.focusWidget(),Qt.Key_Play)
-        if self.sender().media == "pause":
-            QTest.keyClick(self.browser.focusWidget(),Qt.Key_Pause)
-            print("Media pause presionada")
-        if self.sender().media == "stop":
-            QTest.keyClick(self.browser.focusWidget(),Qt.Key_Stop)
-            print("Media stop presionada")          
+        
+        if (self.sender().mode == "mouse"):
+            self.mode = self.sender().mode+"3"
+                    
     
     def charButtonClicked(self):
         print("Char Clicked")
@@ -350,9 +309,7 @@ class QKeyboardPyranha(QWidget):
             if self.uppercase:
                 self.uppercase = False
                 self.charButtonsLower(self)
-                #self.sender().setDefaultStyleSheet('color: gray')
             else:
-                #self.sender().setDefaultStyleSheet('color: green')
                 self.uppercase = True
                 self.charButtonsUpper(self)
         
@@ -387,6 +344,10 @@ class QKeyboardPyranha(QWidget):
         if self.sender().function == "Shift":
             print("Funcion Ctl presionada")
             QTest.keyClick(self.browser.focusWidget(), Qt.Key_Shift)
+    
+    def backButtonClicked(self):
+        self.setArrayStyle(self.array)
+        self.mode = "char4_3"
     
     def charButtonsUpper(self, Form):
         for key in self.charButtonArray:
@@ -511,14 +472,14 @@ class QKeyboardPyranha(QWidget):
         self.funButtonArray.append(self.keyboardUI.funButton_1_8)
         self.funButtonArray.append(self.keyboardUI.funButton_1_9)
         #Cargando los botones de modo
+        self.modeButtonArray.append(self.keyboardUI.modeButtonVoice)
         self.modeButtonArray.append(self.keyboardUI.modeButtonMouse)
         self.modeButtonArray.append(self.keyboardUI.modeButtonMove)
         self.modeButtonArray.append(self.keyboardUI.modeButtonWeb)
         self.modeButtonArray.append(self.keyboardUI.modeButtonSym)
         self.modeButtonArray.append(self.keyboardUI.modeButtonNum)
         self.modeButtonArray.append(self.keyboardUI.modeButtonEmot)
-        self.modeButtonArray.append(self.keyboardUI.modeButtonF)
-        self.modeButtonArray.append(self.keyboardUI.modeButtonGear)
+        self.modeButtonArray.append(self.keyboardUI.modeButtonHand)
         self.modeButtonArray.append(self.keyboardUI.modeButtonOff)
         
         #Cargando los line edit del texto predictivo
