@@ -55,10 +55,14 @@ class Vox:
         audio = open('audio','rb').read()
         headers = {'Content-Type': 'audio/l16; rate=16000;'}
         respuesta = requests.post(url,data=audio,headers=headers)
-        listaux = respuesta.content.split('{"result":[]}\n{"result":[{"alternative":[{"transcript":')
-        listaux = listaux[1].split('"')
-        resultados = self.cadenas(listaux)
-        return resultados
+        try:
+	    listaux = respuesta.content.split('{"result":[]}\n{"result":[{"alternative":[{"transcript":')
+	    listaux = listaux[1].split('"')
+	    resultados = self.cadenas(listaux)
+	    return resultados
+	except:
+	    print "Error de grabacion o grabacion nula:", sys.exc_info()[0]
+	    return ['','']
 
 
     def commandAnalysis(self,rta,commands):

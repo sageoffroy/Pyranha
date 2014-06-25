@@ -294,8 +294,12 @@ class QKeyboardPyranha(QWidget):
         
         if (self.sender().mode == "mouse"):
             self.mode = self.sender().mode+"3"
-                    
-    
+        elif self.sender().mode == "voice":
+	    opc = self.browser.voice.start(self.browser.COMMAND)
+	    self.browser.commandHandler(opc,'')
+	elif self.sender().mode == "hand":
+            opc = self.browser.handDetector.start()        
+            self.browser.commandHandler(opc,'')
     def charButtonClicked(self):
         print("Char Clicked")
         if self.uppercase:

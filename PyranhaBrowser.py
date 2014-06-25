@@ -10,6 +10,8 @@ import os
 
 from QKeyboardPyranha import QKeyboardPyranha
 
+from vox import Vox
+from hand import Hand
 
 JQUERY_URL = 'http://code.jquery.com/jquery-1.11.0.min.js'
 JQUERY_FILE = JQUERY_URL.split('/')[-1]
@@ -54,7 +56,8 @@ class MyLineEdit(QLineEdit):
         
     
 class PyranhaBrowser(QMainWindow):
-
+    COMMAND = ['inicio','pesta','detener','recarga']
+    
     def __init__(self):
         QMainWindow.__init__(self)
         self.resize(1024, 800)
@@ -62,6 +65,8 @@ class PyranhaBrowser(QMainWindow):
         self.setWindowTitle('Pyranha Browser')
         self.default_url="http://www.google.com.ar"
         self.initGui()
+        self.voice = Vox()
+        self.handDetector = Hand()
         self.loadHome()
         self.jquery = getJquery()
         self.funcionesJs=getFuncionesJs()
@@ -248,6 +253,21 @@ class PyranhaBrowser(QMainWindow):
     def showKeyboard(self):
         print("Mostrar Teclado")
 
+
+    def commandHandler(self,opc,extra):
+        if opc == 1:
+	    if extra == '':
+	        self.createTab(self.default_url)
+	    else:
+	        self.createTab(extra)
+	elif opc == 2:
+	    self.loadHome()
+	elif opc == 3:
+	    self.stop()
+	elif opc == 4:
+	    self.reload()
+	else:
+	    print "No hay comando reconocido"
 
     #----- NavBar Function -----#
 

@@ -7,7 +7,7 @@ class Hand:
         self.TRAINSET = "cascade/cascade.xml"
         self.DOWNSCALE = 4
         #self.webcam = cv2.VideoCapture(0)
-        cv2.namedWindow("preview")
+        #cv2.namedWindow("preview")
         self.classifier = cv2.CascadeClassifier(self.TRAINSET)
 
     def detectHand(self):
