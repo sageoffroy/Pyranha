@@ -7,7 +7,7 @@ from json import loads
 
 class Vox:
     
-    def __init__(self, file="audio"):
+    def __init__(self, file="sound/tmp/audio"):
         self.format = paInt16
         #self.rate = 48000
         self.rate = 16000
@@ -52,7 +52,7 @@ class Vox:
         """Metodo para convertir grabaciones de voz a texto, usando la api de google a traves de internet"""
         #rec --encoding signed-integer --bits 16 --channels 1 --rate 16000 test.wav
         url = 'https://www.google.com/speech-api/v2/recognize?output=json&lang=es-ar&key=AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw'
-        audio = open('audio','rb').read()
+        audio = open('sound/tmp/audio','rb').read()
         headers = {'Content-Type': 'audio/l16; rate=16000;'}
         respuesta = requests.post(url,data=audio,headers=headers)
         try:
@@ -70,6 +70,7 @@ class Vox:
         Metodo que realiza un analisis de la respuesta obtenida de convertir la voz a texto.
         Aqui se realiza un analisis de esta respuesta y si contiene un comando valido se ejecuta en consecuencia
         """
+        #print rta
         opc=0
 	for r in rta:
             for c in commands:
