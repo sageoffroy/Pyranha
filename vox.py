@@ -52,7 +52,7 @@ class Vox:
         """Metodo para convertir grabaciones de voz a texto, usando la api de google a traves de internet"""
         #rec --encoding signed-integer --bits 16 --channels 1 --rate 16000 test.wav
         url = 'https://www.google.com/speech-api/v2/recognize?output=json&lang=es-ar&key=AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw'
-        audio = open('sound/tmp/audio','rb').read()
+        audio = open(file,'rb').read()
         headers = {'Content-Type': 'audio/l16; rate=16000;'}
         respuesta = requests.post(url,data=audio,headers=headers)
         try:
