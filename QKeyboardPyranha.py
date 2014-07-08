@@ -1,4 +1,5 @@
 # -*- encoding: utf-8 -*-
+
 from operator import itemgetter
 from PyQt4.QtGui import QWidget, QApplication, QCursor
 from keyboardPyranha import Ui_Form
@@ -95,7 +96,8 @@ class QKeyboardPyranha(QWidget):
         
         self.mouseTimer = QTimer()
         self.mouseTimer.timeout.connect(self.mouseTick)
-        
+        self.mouseY = 0
+        self.mouseX = 0
         self.mouseStop = False
         
     def setKeyStyleSheet(self):
@@ -262,27 +264,54 @@ class QKeyboardPyranha(QWidget):
     
     def mouseButtonClicked(self):
         act = self.sender().action
-        self.mouseX = 0
-        self.mouseY = 0
-        self.mouseTimer.start(20)
-        self.timer.stop()
-        
-        self.setArrayStyle(self.array, 'white')
-        self.currentKey = self.keyboardUI.mouseButton_c
-        self.setKeyStyle(self.currentKey, 'blue')
+        if(act != "c"):
+            self.mouseTimer.start(20)
+            self.timer.stop()
+            self.setArrayStyle(self.array, 'white')
+            self.currentKey = self.keyboardUI.mouseButton_c
+            self.setKeyStyle(self.currentKey, 'blue')
         
         if(act == "u"):
+            self.mouseX = 0
             self.mouseY = -1  
         elif(act == "l"):
             self.mouseX = -1
+            self.mouseY = 0
         elif(act == "r"):
             self.mouseX = 1
+            self.mouseY = 0
         elif(act == "d"):
+            self.mouseX = 0
             self.mouseY = 1
+        elif(act == "lu"):
+            self.mouseY = -1
+            self.mouseX = -1
+        elif(act == "ru"):
+            self.mouseY = -1
+            self.mouseX = 1
+        elif(act == "ld"):
+            self.mouseY = 1
+            self.mouseX = -1
+        elif(act == "rd"):
+            self.mouseY = 1
+            self.mouseX = 1
         elif(act == "c"):
-            self.timer.start(2000)
-            self.mouseTimer.stop()
-            self.currentKey = None
+            if ((self.mouseY != 0) and (self.mouseY != 0)):
+                self.mouseY = 0
+                self.mouseX = 0
+                self.timer.start(2000)
+                self.mouseTimer.stop()
+                self.setKeyStyle(self.currentKey, 'white')
+                self.currentKey = None
+            else:
+                print("EL mouse esta quierto")
+            
+        elif(act == "cr"):
+            print("Click derecho")
+            
+        elif(act == "cl"):
+            print("Click izquierdo")
+            
         
     def mouseTick(self):
         self.mouseCursor = QCursor()
@@ -294,12 +323,8 @@ class QKeyboardPyranha(QWidget):
         
         if (self.sender().mode == "mouse"):
             self.mode = self.sender().mode+"3"
-        elif self.sender().mode == "voice":
-	    opc = self.browser.voice.start(self.browser.COMMAND)
-	    self.browser.commandHandler(opc,'')
-	elif self.sender().mode == "hand":
-            opc = self.browser.handDetector.start()        
-            self.browser.commandHandler(opc,'')
+                    
+    
     def charButtonClicked(self):
         print("Char Clicked")
         if self.uppercase:
