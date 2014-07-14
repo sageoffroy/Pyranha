@@ -1,9 +1,10 @@
+import sys
 import requests
 from pyaudio import PyAudio, paInt16
 from wave import open as open_audio
 from os import system
 from json import loads
-
+from ruido import *
 
 class Vox:
     
@@ -23,6 +24,7 @@ class Vox:
         stream = audio.open(input_device_index=device_i,output_device_index=device_i,format=self.format, channels=self.channel,
                             rate=self.rate, input=True,
                             frames_per_buffer=self.chunk)
+        playDing()
         print "REC: "
         frames = []
         for i in range(0, self.rate / self.chunk * time):
