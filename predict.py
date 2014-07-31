@@ -7,6 +7,7 @@ class predict:
     def prediction(self,subword):
         """Metodo que retorna las palabras que coinciden con el comienzo de la subpalabra, ordenadas
         por el criterio de "mas utilizada" a "menos utilizada" """
+        subword = subword.lower()
 	self.sql.start()
 	dic = self.sql.get_dic()
 	li = list()
