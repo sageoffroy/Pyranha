@@ -54,7 +54,7 @@ class sqliteHandler:
         
     def get_quick(self):
         """Metodo que retorna todas los Quick en forma de lista"""
-        self.cursor.execute('SELECT * FROM "main"."quick" ;')
+        self.cursor.execute('SELECT descrip, url FROM "main"."quick" ;')
         lista = self.cursor.fetchall()
         return lista
     

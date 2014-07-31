@@ -12,6 +12,7 @@ from QKeyboardPyranha import QKeyboardPyranha
 
 from vox import Vox
 from hand import Hand
+from sqliteHandler import *
 
 JQUERY_URL = 'http://code.jquery.com/jquery-1.11.0.min.js'
 JQUERY_FILE = JQUERY_URL.split('/')[-1]
@@ -56,7 +57,8 @@ class MyLineEdit(QLineEdit):
         
     
 class PyranhaBrowser(QMainWindow):
-    COMMAND = ['inicio','pesta','detener','recarga']
+    COMMAND = ['inicio','pesta','detener','recarga','video','musica','deporte']
+    QUICK = {}
     
     def __init__(self):
         QMainWindow.__init__(self)
@@ -72,6 +74,17 @@ class PyranhaBrowser(QMainWindow):
         self.funcionesJs=getFuncionesJs()
         self.resizeEvent = self.onResize
         self.activeKey = False;
+        self.sql = sqliteHandler()
+        self.initQuick()
+        
+    def initQuick(self):
+        self.sql.start()
+        listQuick = self.sql.get_quick()
+        print(listQuick)
+        for l in listQuick:
+	    self.QUICK.update({str(l[0]):str(l[1])})
+	print(self.QUICK)
+        self.sql.close_connection()
 
     def initGui(self):
         self.centralwidget = QWidget(self)
@@ -266,6 +279,13 @@ class PyranhaBrowser(QMainWindow):
 	    self.stop()
 	elif opc == 4:
 	    self.reload()
+	elif opc == 5:
+	    print(self.QUICK.get('Video'))
+	    self.createTab(self.QUICK.get('Video'))
+	elif opc == 6:
+	    self.createTab(self.QUICK.get('Music'))
+	elif opc == 7:
+	    self.createTab(self.QUICK.get('Sport'))
 	else:
 	    print "No hay comando reconocido"
 

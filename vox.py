@@ -89,6 +89,16 @@ class Vox:
                     elif c == 'recarga':
 		        #reload(self)
 		        return 4
+		    elif c == 'video':
+		        #reload(self)
+		        return 5
+		    elif c == 'musica':
+		        #reload(self)
+		        return 6
+		    elif c == 'deporte':
+		        #reload(self)
+		        return 7
+		      
         return opc
       
     def start(self,commands):
