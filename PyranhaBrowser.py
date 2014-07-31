@@ -255,6 +255,7 @@ class PyranhaBrowser(QMainWindow):
 
 
     def commandHandler(self,opc,extra):
+        
         if opc == 1:
 	    if extra == '':
 	        self.createTab(self.default_url)

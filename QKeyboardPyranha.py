@@ -1,9 +1,9 @@
 # -*- encoding: utf-8 -*-
 
 from operator import itemgetter
-from PyQt4.QtGui import QWidget, QApplication, QCursor
+from PyQt4.QtGui import QWidget, QApplication, QCursor, QMouseEvent
 from keyboardPyranha import Ui_Form
-from PyQt4.QtCore import Qt, QTimer, QPoint
+from PyQt4.QtCore import Qt, QTimer, QPoint, QEvent, QCoreApplication, pyqtSlot
 from PyQt4.QtTest import QTest
 
 #En los caso que se use python 3 QString no existe
@@ -262,9 +262,12 @@ class QKeyboardPyranha(QWidget):
             key.setText(_translate("Form", num[0], None)) 
             key.clicked.connect(self.charButtonClicked)
     
+    @pyqtSlot()
     def mouseButtonClicked(self):
         act = self.sender().action
-        if(act != "c"):
+        print("Action = "+ act)
+        if((act != "c") and (act != "cl") and (act != "cr")):
+            print ("necesita frenar")
             self.mouseTimer.start(20)
             self.timer.stop()
             self.setArrayStyle(self.array, 'white')
@@ -296,7 +299,9 @@ class QKeyboardPyranha(QWidget):
             self.mouseY = 1
             self.mouseX = 1
         elif(act == "c"):
-            if ((self.mouseY != 0) and (self.mouseY != 0)):
+            print (self.mouseX)
+            print (self.mouseY)
+            if ((self.mouseX != 0) or (self.mouseY != 0)):
                 self.mouseY = 0
                 self.mouseX = 0
                 self.timer.start(2000)
@@ -304,15 +309,42 @@ class QKeyboardPyranha(QWidget):
                 self.setKeyStyle(self.currentKey, 'white')
                 self.currentKey = None
             else:
-                print("EL mouse esta quierto")
+                print("EL mouse esta quieto")
             
         elif(act == "cr"):
             print("Click derecho")
+            self.mouseCursor = QCursor()
+            print(self.mouseCursor.pos())
             
+            myMouseEvent = QMouseEvent(
+                                            QEvent.MouseButtonRelease,
+                                            self.mouseCursor.pos(),
+                                            Qt.RightButton,
+                                            Qt.RightButton,
+                                            Qt.NoModifier,
+                                        )
+            QCoreApplication.postEvent(self.browser, myMouseEvent)
+        
         elif(act == "cl"):
             print("Click izquierdo")
+            self.mouseCursor = QCursor()
+            print(self.mouseCursor.pos())
             
+            myMouseEvent = QMouseEvent(
+                                            QEvent.MouseButtonRelease,
+                                            self.mouseCursor.pos(),
+                                            Qt.LeftButton,
+                                            Qt.LeftButton,
+                                            Qt.NoModifier,
+                                        )
+            QCoreApplication.postEvent(self.browser, myMouseEvent)
         
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton:
+            print "Mouse Release"
+        
+        super(QKeyboardPyranha, self).mouseReleaseEvent(event)    
+    
     def mouseTick(self):
         self.mouseCursor = QCursor()
         self.mousePos = self.mouseCursor.pos()
