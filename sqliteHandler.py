@@ -15,7 +15,7 @@ class sqliteHandler:
         self.cursor = self.con.cursor()
         print "Base de datos abierta correctamente..."
       
-    def close_connection():
+    def close_connection(self):
         """Metodo para cerrar la conexion de la base de datos"""
         self.con.close()
     #----------------------------------------------------------------------
@@ -53,15 +53,35 @@ class sqliteHandler:
         self.con.commit()
         
     def get_quick(self):
-        "Metodo que retorna todas los Quick en forma de lista"
+        """Metodo que retorna todas los Quick en forma de lista"""
         self.cursor.execute('SELECT * FROM "main"."quick" ;')
         lista = self.cursor.fetchall()
         return lista
     
     def modify_quick(self, descrip, url):
-        """Metod para modificar la url de un Quick, especificando tambien cual de ellos usando descrip """
+        """Metodo para modificar la url de un Quick, especificando tambien cual de ellos usando descrip """
         self.cursor.execute('UPDATE "main"."quick" set url ='+url+' where id_quick in (SELECT id_quick FROM "main"."quick" WHERE descrip ='+descrip+' );')
         self.con.commit()
+    #----------------------------------------------------------------------
+    
+    #----------------------------------------------------------------------
+    #---DIC----------------------------------------------------------------
+    #----------------------------------------------------------------------
+    def get_dic(self):
+        """Metodo que retorna todo el diccionario"""
+        result = self.cursor.execute('SELECT word,value FROM "main"."dic" ;')
+        result = result.fetchall()
+        dic = dict(result)
+        return dic
+
+    def update_dic(self, word):
+        """Metodo que actualiza el valor de las palabras del diccionario"""
+        oldvalue = self.cursor.execute('SELECT value FROM "main"."dic" WHERE word ='+word+';')
+        newvalue = oldvalue.fetchone()
+        newvalue = newvalue[0]+1
+        self.cursor.execute('UPDATE "main"."dic" SET value ='+newvalue+' WHERE word ='+word+' ;')
+        self.con.commit()
+        
     #----------------------------------------------------------------------
     
     def start(self):
