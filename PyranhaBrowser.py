@@ -2,6 +2,7 @@ import sys
 from PyQt4.QtCore import Qt, QUrl
 from PyQt4.QtGui import QLineEdit, QMainWindow, QIcon, QWidget, QVBoxLayout, QHBoxLayout, QKeyEvent, QToolButton, QTabWidget, QApplication
 from PyQt4.QtWebKit import QWebView
+from pymouse import PyMouse
 
 #from urllib.request import urlopen
 from urllib2 import urlopen
@@ -77,6 +78,7 @@ class PyranhaBrowser(QMainWindow):
         self.sql = sqliteHandler()
         self.initQuick()
         
+    
     def initQuick(self):
         self.sql.start()
         listQuick = self.sql.get_quick()
