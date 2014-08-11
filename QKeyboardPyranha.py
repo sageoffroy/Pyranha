@@ -7,6 +7,8 @@ from PyQt4.QtCore import Qt, QTimer, QPoint, QEvent, QCoreApplication, pyqtSlot
 from PyQt4.QtTest import QTest
 from pymouse import PyMouse
 
+from predict import *
+
 #En los caso que se use python 3 QString no existe
 try:  
     from PyQt4.QtCore import QString  
@@ -67,19 +69,32 @@ class QKeyboardPyranha(QWidget):
         
         #Referencia al navegador para obtener el foco
         self.browser = browser
+        
         #Cargando interfaz y configurando botones
         self.keyboardUI = Ui_Form()
         self.keyboardUI.setupUi(self)
         self.setArray()
         self.setButtonFocusPolicy()
+        
+        #Instanciamos el predict
+        self.predict = predict()
+        self.listPredict = self.predict.prediction ('')
+        print("-------------------") 
+        print(self.listPredict)
+        print("-------------------")
+        self.keyboardUI.predectiveLineEdit_1.setText(self.listPredict[0]) 
+        self.keyboardUI.predectiveLineEdit_2.setText(self.listPredict[1])
+        self.keyboardUI.predectiveLineEdit_3.setText(self.listPredict[2])
         #Comenzamos con la funcion mayuscula desactivada
         self.uppercase = False
+        
         #Configuramos las teclas
         self.configCharKeys()
         self.configFunctionKeys()
         self.configNumKeys()
         self.configModeKeys()
         self.configMouseKeys()
+        
         #Configuramos los modos
         self.configCharMode()
         self.configMouseMode()
@@ -91,6 +106,7 @@ class QKeyboardPyranha(QWidget):
         self.mode = "char1"
         self.activeClick = False
         self.currentKey = None
+        
         #self.setDefaultStyle(self.arrow3)
         self.setArrayStyle(self.predectiveLineEditArray,'red')
         self.timer = QTimer()
@@ -242,6 +258,10 @@ class QKeyboardPyranha(QWidget):
             key.char =char[0]
             key.setText(_translate("Form", char[0], None)) 
             key.clicked.connect(self.charButtonClicked)
+            
+        self.predectiveLineEditArray[0].clicked.connect(self.charButtonClicked)
+        self.predectiveLineEditArray[1].clicked.connect(self.charButtonClicked)
+        self.predectiveLineEditArray[2].clicked.connect(self.charButtonClicked)
     
     def configFunctionKeys(self):
         functionList = sorted(self.functionDict.items(), key=itemgetter(1),reverse=True)
@@ -317,7 +337,7 @@ class QKeyboardPyranha(QWidget):
         elif(act == "cr"):
             print("Click derecho")
             
-            self.mouse.click(self.mousePos.x(), self.mousePos.y(), 0)
+            self.mouse.click(self.mousePos.x(), self.mousePos.y(), 2)
             
             
         
@@ -350,9 +370,13 @@ class QKeyboardPyranha(QWidget):
     def charButtonClicked(self):
         print("Char Clicked")
         if self.uppercase:
-            QTest.keyClick(self.browser.focusWidget(), self.sender().char.upper())
+            key =  self.sender().text().toUpper()
         else:
-            QTest.keyClick(self.browser.focusWidget(), self.sender().char)
+            key =  self.sender().text()
+        
+        for c in key:
+            QTest.keyClick(self.browser.focusWidget(), c)
+            
         
     def functionButtonClicked(self):
         if self.sender().function == "May":
