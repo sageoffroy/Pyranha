@@ -26,7 +26,7 @@ class predict:
         dic = self.sql.get_dic()#diccionario 'completo' de la rae, no ordenado
         li = list()
         result = list()
-        subword = subword.lower()
+        subword = str(subword).lower()
         li = self.dictToList(dic,subword)
         li = sorted(li, key=lambda score: score[1], reverse=True)#ordena las palabras por valor
         li = self.getPodium(li)

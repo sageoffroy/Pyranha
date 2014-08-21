@@ -78,13 +78,8 @@ class QKeyboardPyranha(QWidget):
         
         #Instanciamos el predict
         self.predict = predict()
-        self.listPredict = self.predict.prediction ('')
-        print("-------------------") 
-        print(self.listPredict)
-        print("-------------------")
-        self.keyboardUI.predectiveLineEdit_1.setText(self.listPredict[0]) 
-        self.keyboardUI.predectiveLineEdit_2.setText(self.listPredict[1])
-        self.keyboardUI.predectiveLineEdit_3.setText(self.listPredict[2])
+        self.buffer = QString()
+        self.refreshPredict('')
         #Comenzamos con la funcion mayuscula desactivada
         self.uppercase = False
         
@@ -149,49 +144,49 @@ class QKeyboardPyranha(QWidget):
             self.i = 0
     
     def tick(self):
-        print("tick")
+        #print("tick")
         self.setArrayStyle(self.array)
         
         if(self.mode == "char1"):
-            print("Char 2")
+            #print("Char 2")
             self.mode = "char2"
             self.setArrayStyle(self.modeButtonArray,'red')
         elif (self.mode == "char2"):
-            print("Char 3")
+            #print("Char 3")
             self.setArrayStyle(self.funButtonArray,'red')
             self.mode = "char3"
         elif (self.mode == "char3"):
-            print("Char 4_1")
+            #print("Char 4_1")
             self.mode = "char4_1"
             self.setArrayStyle(self.charArrow1,'red')
         elif (self.mode == "char4_1"):
-            print("Char 4_2")
+            #print("Char 4_2")
             self.mode = "char4_2"
             self.setArrayStyle(self.charArrow2,'red')
         elif (self.mode == "char4_2"):
-            print("Char 4_3")
+            #print("Char 4_3")
             self.mode = "char4_3"
             self.setArrayStyle(self.charArrow3,'red')
         elif (self.mode == "char4_3"):
-            print("Char 1")
+            #print("Char 1")
             self.mode = "char1"
             self.setArrayStyle(self.predectiveLineEditArray,'red')
         elif (self.mode == "mouse1"):
             self.mouseStop = False
-            print("mouse2")
+            #print("mouse2")
             self.mode = "mouse2"
             self.setArrayStyle(self.mouseArrow2,'red')
         elif (self.mode == "mouse2"):
-            print("mouse3")
+            #print("mouse3")
             self.mode = "mouse3"
             self.setArrayStyle(self.mouseArrow3,'red')
         elif (self.mode == "mouse3"):
-            print("mouse1")
+            #print("mouse1")
             self.mode = "mouse1"
             self.setArrayStyle(self.mouseArrow1,'red')
             
     def tick2(self):
-        print("tick 2")
+        #print("tick 2")
         if (self.i > len(self.array)-1):
             
             #self.timer.timeout.disconnect(self.tick2)
@@ -217,6 +212,16 @@ class QKeyboardPyranha(QWidget):
         style = 'color:#44d51C;border-radius: 8px;border-style: outset;border-width: 1px;border-color:'+border_color+';background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #888888, stop: 0.1 #222222);'
         w.setStyleSheet(style)
         
+    #-- Metodo que refresca el texto predictivo --#
+    def refreshPredict(self, s):
+        s = QString(s)
+        print (s.length())
+        
+        self.buffer.append(s)
+        self.listPredict = self.predict.prediction (self.buffer)
+        self.keyboardUI.predectiveLineEdit_1.setText(self.listPredict[0]) 
+        self.keyboardUI.predectiveLineEdit_2.setText(self.listPredict[1])
+        self.keyboardUI.predectiveLineEdit_3.setText(self.listPredict[2])
     
     def configMouseMode(self):
         for key in self.mouseButtonArray:
@@ -322,8 +327,6 @@ class QKeyboardPyranha(QWidget):
             self.mouseY = 1
             self.mouseX = 1
         elif(act == "c"):
-            print (self.mouseX)
-            print (self.mouseY)
             if ((self.mouseX != 0) or (self.mouseY != 0)):
                 self.mouseY = 0
                 self.mouseX = 0
@@ -356,13 +359,12 @@ class QKeyboardPyranha(QWidget):
         
     def modeButtonClicked(self):
         print(self.sender().mode + " clicked")
-        
         if (self.sender().mode == "mouse"):
             self.mode = self.sender().mode+"3"
         elif self.sender().mode == "voice":
-	    opc = self.browser.voice.start(self.browser.COMMAND)
-	    self.browser.commandHandler(opc,'')
-	elif self.sender().mode == "hand":
+            opc = self.browser.voice.start(self.browser.COMMAND)
+            self.browser.commandHandler(opc,'')
+        elif self.sender().mode == "hand":
             opc = self.browser.handDetector.start()        
             self.browser.commandHandler(opc,'')
                     
@@ -373,7 +375,8 @@ class QKeyboardPyranha(QWidget):
             key =  self.sender().text().toUpper()
         else:
             key =  self.sender().text()
-        
+        self.refreshPredict(key)
+        print(self.browser.focusWidget().text())
         for c in key:
             QTest.keyClick(self.browser.focusWidget(), c)
             
