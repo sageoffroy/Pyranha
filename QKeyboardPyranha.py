@@ -32,6 +32,8 @@ except AttributeError:
 
 class QKeyboardPyranha(QWidget):
     
+    verde='#44d51c'
+    
     
     predectiveLineEditArray = []
     charModeArray = []
@@ -110,7 +112,7 @@ class QKeyboardPyranha(QWidget):
         self.currentKey = None
         
         #self.setDefaultStyle(self.arrow3)
-        self.setArrayStyle(self.predectiveLineEditArray,'red')
+        self.setArrayStyle(self.predectiveLineEditArray,self.verde,'red')
         self.timer = QTimer()
         self.timer.timeout.connect(self.tick)
         self.timer.start(2000)
@@ -157,56 +159,56 @@ class QKeyboardPyranha(QWidget):
         if(self.mode == "char1"):
             #print("Char 2")
             self.mode = "char2"
-            self.setArrayStyle(self.modeButtonArray,'red')
+            self.setArrayStyle(self.modeButtonArray,self.verde, 'red')
         elif (self.mode == "char2"):
             #print("Char 3")
-            self.setArrayStyle(self.funButtonArray,'red')
+            self.setArrayStyle(self.funButtonArray,self.verde,'red')
             self.mode = "char3"
         elif (self.mode == "char3"):
             #print("Char 4_1")
             self.mode = "char4_1"
-            self.setArrayStyle(self.charArrow1,'red')
+            self.setArrayStyle(self.charArrow1,self.verde,'red')
         elif (self.mode == "char4_1"):
             #print("Char 4_2")
             self.mode = "char4_2"
-            self.setArrayStyle(self.charArrow2,'red')
+            self.setArrayStyle(self.charArrow2,self.verde,'red')
         elif (self.mode == "char4_2"):
             #print("Char 4_3")
             self.mode = "char4_3"
-            self.setArrayStyle(self.charArrow3,'red')
+            self.setArrayStyle(self.charArrow3,self.verde,'red')
         elif (self.mode == "char4_3"):
             #print("Char 1")
             self.mode = "char1"
-            self.setArrayStyle(self.predectiveLineEditArray,'red')
+            self.setArrayStyle(self.predectiveLineEditArray,self.verde,'red')
         elif (self.mode == "mouse1"):
             self.mouseStop = False
             #print("mouse2")
             self.mode = "mouse2"
-            self.setArrayStyle(self.mouseArrow2,'red')
+            self.setArrayStyle(self.mouseArrow2,self.verde,'red')
         elif (self.mode == "mouse2"):
             #print("mouse3")
             self.mode = "mouse3"
-            self.setArrayStyle(self.mouseArrow3,'red')
+            self.setArrayStyle(self.mouseArrow3,self.verde,'red')
         elif (self.mode == "mouse3"):
             #print("mouse1")
             self.mode = "mouse1"
-            self.setArrayStyle(self.mouseArrow1,'red')
+            self.setArrayStyle(self.mouseArrow1,self.verde,'red')
         elif (self.mode == "web1"):
             print("web1")
             self.mode = "web2"
-            self.setArrayStyle(self.webArray1,'red')
+            self.setArrayStyle(self.webArray1,self.verde,'red')
         elif (self.mode == "web2"):
             print("web2")
             self.mode = "web3"
-            self.setArrayStyle(self.webArray2,'red')
+            self.setArrayStyle(self.webArray2,self.verde,'red')
         elif (self.mode == "web3"):
             print("web3")
             self.mode = "web4"
-            self.setArrayStyle(self.webArray3,'red')
+            self.setArrayStyle(self.webArray3,self.verde,'red')
         elif (self.mode == "web4"):
             print("web4")
             self.mode = "web1"
-            self.setArrayStyle(self.webArray4,'red')
+            self.setArrayStyle(self.webArray4,self.verde,'red')
             
     def tick2(self):
         #print("tick 2")
@@ -216,23 +218,23 @@ class QKeyboardPyranha(QWidget):
             self.i = 0
             #self.timer.timeout.connect(self.tick)
             self.mode = "char4_3"
-            self.setArrayStyle(self.array, 'white')
+            self.setArrayStyle(self.array,self.verde, 'white')
         
         else:
-            self.setArrayStyle(self.array, 'red')
+            self.setArrayStyle(self.array,self.verde, 'red')
             self.currentKey = self.array[self.i] 
-            self.setKeyStyle(self.array[self.i], 'blue')
+            self.setKeyStyle(self.array[self.i],self.verde, 'blue')
             
             self.i+=1
         
     
-    def setArrayStyle(self, array, border_color='white'):
+    def setArrayStyle(self, array, color='#44d51c', border_color='white'):
         self.array = array
         for widget in array:
-            self.setKeyStyle(widget, border_color)
+            self.setKeyStyle(widget, color, border_color)
 
-    def setKeyStyle(self, w, border_color='white'):
-        style = 'color:#44d51C;border-radius: 8px;border-style: outset;border-width: 1px;border-color:'+border_color+';background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #888888, stop: 0.1 #222222);'
+    def setKeyStyle(self, w, color=00, border_color='white'):
+        style = 'color:'+color+';border-radius: 8px;border-style: outset;border-width: 1px;border-color:'+border_color+';background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #888888, stop: 0.1 #222222);'
         w.setStyleSheet(style)
         
     #-- Metodo que refresca el texto predictivo --#
@@ -275,7 +277,7 @@ class QKeyboardPyranha(QWidget):
                     self.webArray2.append(key)
                 elif (key.pos().y()==170):
                     self.webArray3.append(key)
-		elif (key.pos().y()==210):
+                elif (key.pos().y()==210):
                     self.webArray4.append(key)
     
     def configMouseKeys(self):
