@@ -45,6 +45,11 @@ class QKeyboardPyranha(QWidget):
     mouseArrow1 = []
     mouseArrow2 = []
     mouseArrow3 = []
+
+    webArray1 = []
+    webArray2 = []
+    webArray3 = []
+    webArray4 = []
         
     mouseButtonArray = []
     moveButtonArray = []
@@ -89,10 +94,12 @@ class QKeyboardPyranha(QWidget):
         self.configNumKeys()
         self.configModeKeys()
         self.configMouseKeys()
+        self.configWebKeys()
         
         #Configuramos los modos
         self.configCharMode()
         self.configMouseMode()
+        self.configWebMode()
         
         self.setKeyStyleSheet()
         
@@ -184,6 +191,22 @@ class QKeyboardPyranha(QWidget):
             #print("mouse1")
             self.mode = "mouse1"
             self.setArrayStyle(self.mouseArrow1,'red')
+        elif (self.mode == "web1"):
+            print("web1")
+            self.mode = "web2"
+            self.setArrayStyle(self.webArray1,'red')
+        elif (self.mode == "web2"):
+            print("web2")
+            self.mode = "web3"
+            self.setArrayStyle(self.webArray2,'red')
+        elif (self.mode == "web3"):
+            print("web3")
+            self.mode = "web4"
+            self.setArrayStyle(self.webArray3,'red')
+        elif (self.mode == "web4"):
+            print("web4")
+            self.mode = "web1"
+            self.setArrayStyle(self.webArray4,'red')
             
     def tick2(self):
         #print("tick 2")
@@ -234,7 +257,6 @@ class QKeyboardPyranha(QWidget):
                 self.mouseArrow3.append(key)
     
     def configCharMode(self):
-        #self.setCharModeArray()
         for key in self.charButtonArray:
                 None
                 if (key.pos().y()==130):
@@ -243,13 +265,32 @@ class QKeyboardPyranha(QWidget):
                     self.charArrow2.append(key)
                 elif (key.pos().y()==210):
                     self.charArrow3.append(key)
-      
+    
+    def configWebMode(self):
+        for key in self.webButtonArray:
+                None
+                if (key.pos().y()==90):
+                    self.webArray1.append(key)
+                elif (key.pos().y()==130):
+                    self.webArray2.append(key)
+                elif (key.pos().y()==170):
+                    self.webArray3.append(key)
+		elif (key.pos().y()==210):
+                    self.webArray4.append(key)
+    
     def configMouseKeys(self):
         for key in self.mouseButtonArray:
             if (key.accessibleName()=="back"):
                 key.clicked.connect(self.backButtonClicked)
             else:
                 key.clicked.connect(self.mouseButtonClicked)
+                
+    def configWebKeys(self):
+        for key in self.webButtonArray:
+            if (key.accessibleName()=="back"):
+                key.clicked.connect(self.backButtonClicked)
+            else:
+                key.clicked.connect(self.webButtonClicked)
             
             
     def configModeKeys(self):
@@ -367,7 +408,12 @@ class QKeyboardPyranha(QWidget):
         elif self.sender().mode == "hand":
             opc = self.browser.handDetector.start()        
             self.browser.commandHandler(opc,'')
+        elif self.sender().mode == "web":
+	    self.mode = "web1"
+	    
                     
+    def webButtonClicked(self):
+      print("Mode Web")
     
     def charButtonClicked(self):
         print("Char Clicked")

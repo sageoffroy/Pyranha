@@ -4,7 +4,6 @@ class predict:
     def __init__(self):
         self.sql = sqliteHandler()
 
-
     def dictToList(self,dic,subword):
         """Metodo que retorna en una lista los valores """
         li = list()
