@@ -416,6 +416,18 @@ class QKeyboardPyranha(QWidget):
                     
     def webButtonClicked(self):
       print("Mode Web")
+      if(self.sender().web_function=="go"):
+          print "go"
+      if(self.sender().web_function=="home"):
+          self.browser.loadURL(self.browser.web, self.browser.default_url)
+      if(self.sender().web_function=="new_tab"):
+          self.browser.createTab(self.browser.default_url)
+      if(self.sender().web_function=="stop"):
+          self.browser.stop()
+      if(self.sender().web_function=="refresh"):
+          self.browser.reload()
+      #if(self.sender().web_function==""):
+      #if(self.sender().web_function==""):
     
     def charButtonClicked(self):
         print("Char Clicked")
