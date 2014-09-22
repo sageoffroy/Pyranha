@@ -11,6 +11,7 @@ from PyQt4 import QtCore, QtGui
 from QModeButton import QModeButton
 from QMouseButton import QMouseButton
 from QBackButton import QBackButton
+from QWebButton import QWebButton
 
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
@@ -24,13 +25,13 @@ class Ui_Form(object):
         Form.setStyleSheet(_fromUtf8("color:#3ea700"))
         font = QtGui.QFont()
         font.setPointSize(14)
-        font.setPointSize(14)
 ####################################################################################
         #CharButton 1_1
         self.charButton_1_1 = QtGui.QPushButton(Form)
         self.charButton_1_1.setGeometry(QtCore.QRect(0, 130, 35, 35))
         self.charButton_1_1.setMinimumSize(QtCore.QSize(35, 35))
         self.charButton_1_1.setMaximumSize(QtCore.QSize(35, 35))
+        self.charButton_1_1.setFont(font)
         self.charButton_1_1.setObjectName(_fromUtf8("charButton_1_1"))
         #CharButton 1_2
         self.charButton_1_2 = QtGui.QPushButton(Form)
@@ -262,7 +263,7 @@ class Ui_Form(object):
         iconMode.addPixmap(QtGui.QPixmap(_fromUtf8("img/modeWeb.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.modeButtonWeb.setIcon(iconMode)
         self.modeButtonWeb.setIconSize(QtCore.QSize(20, 20))
-        self.modeButtonWeb.setObjectName(_fromUtf8("modeButtonWeb"))		
+        self.modeButtonWeb.setObjectName(_fromUtf8("modeButtonWeb"))        
         #Mode Sym
         self.modeButtonSym = QModeButton(Form, "sym")
         self.modeButtonSym.setGeometry(QtCore.QRect(160, 50, 35, 35))
@@ -386,15 +387,15 @@ class Ui_Form(object):
         ####################################################################################
         font = QtGui.QFont()
         font.setPointSize(12)
-        self.predectiveLineEdit_1 = QtGui.QLineEdit(Form)
+        self.predectiveLineEdit_1 = QtGui.QPushButton(Form)
         self.predectiveLineEdit_1.setGeometry(QtCore.QRect(0, 10, 115, 35))
         self.predectiveLineEdit_1.setFont(font)
         self.predectiveLineEdit_1.setObjectName(_fromUtf8("predectiveLineEdit_1"))
-        self.predectiveLineEdit_2 = QtGui.QLineEdit(Form)
+        self.predectiveLineEdit_2 = QtGui.QPushButton(Form)
         self.predectiveLineEdit_2.setGeometry(QtCore.QRect(120, 10, 115, 35))
         self.predectiveLineEdit_2.setFont(font)
         self.predectiveLineEdit_2.setObjectName(_fromUtf8("predectiveLineEdit_2"))
-        self.predectiveLineEdit_3 = QtGui.QLineEdit(Form)
+        self.predectiveLineEdit_3 = QtGui.QPushButton(Form)
         self.predectiveLineEdit_3.setGeometry(QtCore.QRect(240, 10, 115, 35))
         self.predectiveLineEdit_3.setFont(font)
         self.predectiveLineEdit_3.setObjectName(_fromUtf8("predectiveLineEdit_3"))
@@ -545,7 +546,7 @@ class Ui_Form(object):
         
         iconWeb = QtGui.QIcon()
         #Web 1_1
-        self.webButton_1_1 = QtGui.QPushButton(Form)
+        self.webButton_1_1 = QWebButton(Form,"go")
         self.webButton_1_1.setGeometry(QtCore.QRect(370, 90, 35, 35))
         self.webButton_1_1.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_1_1.setMaximumSize(QtCore.QSize(35, 35))
@@ -556,7 +557,7 @@ class Ui_Form(object):
         self.webButton_1_1.setIconSize(QtCore.QSize(20, 20))
         self.webButton_1_1.setObjectName(_fromUtf8("webButton_1_1"))
         #Web 1_2
-        self.webButton_1_2 = QtGui.QPushButton(Form)
+        self.webButton_1_2 = QWebButton(Form,"home")
         self.webButton_1_2.setGeometry(QtCore.QRect(410, 90, 35, 35))
         self.webButton_1_2.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_1_2.setMaximumSize(QtCore.QSize(35, 35))
@@ -568,7 +569,7 @@ class Ui_Form(object):
         self.webButton_1_2.setIconSize(QtCore.QSize(20, 20))
         self.webButton_1_2.setObjectName(_fromUtf8("webButton_1_2"))
         #Web 1_3
-        self.webButton_1_3 = QtGui.QPushButton(Form)
+        self.webButton_1_3 = QWebButton(Form,"new_tab")
         self.webButton_1_3.setGeometry(QtCore.QRect(450, 90, 35, 35))
         self.webButton_1_3.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_1_3.setMaximumSize(QtCore.QSize(35, 35))
@@ -579,7 +580,7 @@ class Ui_Form(object):
         self.webButton_1_3.setIconSize(QtCore.QSize(20, 20))
         self.webButton_1_3.setObjectName(_fromUtf8("webButton_1_3"))
         
-        self.webButton_2_4 = QtGui.QPushButton(Form)
+        self.webButton_2_4 = QWebButton(Form,"zoom_out")
         self.webButton_2_4.setGeometry(QtCore.QRect(490, 130, 35, 35))
         self.webButton_2_4.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_2_4.setMaximumSize(QtCore.QSize(35, 35))
@@ -590,7 +591,7 @@ class Ui_Form(object):
         self.webButton_2_4.setIconSize(QtCore.QSize(20, 20))
         self.webButton_2_4.setObjectName(_fromUtf8("webButton_2_4"))
         
-        self.webButton_4_3 = QtGui.QPushButton(Form)
+        self.webButton_4_3 = QWebButton(Form,".net")
         self.webButton_4_3.setGeometry(QtCore.QRect(450, 210, 35, 35))
         self.webButton_4_3.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_4_3.setMaximumSize(QtCore.QSize(35, 35))
@@ -600,7 +601,7 @@ class Ui_Form(object):
         self.webButton_4_3.setStyleSheet(_fromUtf8("color:#2496b6"))
         self.webButton_4_3.setObjectName(_fromUtf8("webButton_4_3"))
         
-        self.webButton_3_2 = QtGui.QPushButton(Form)
+        self.webButton_3_2 = QWebButton(Form,"/")
         self.webButton_3_2.setGeometry(QtCore.QRect(410, 170, 35, 35))
         self.webButton_3_2.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_3_2.setMaximumSize(QtCore.QSize(35, 35))
@@ -609,7 +610,8 @@ class Ui_Form(object):
         self.webButton_3_2.setFont(font)
         self.webButton_3_2.setStyleSheet(_fromUtf8("color:#2496b6"))
         self.webButton_3_2.setObjectName(_fromUtf8("webButton_3_2"))
-        self.webButton_2_3 = QtGui.QPushButton(Form)
+        
+        self.webButton_2_3 = QWebButton(Form,"zoom_in")
         self.webButton_2_3.setGeometry(QtCore.QRect(450, 130, 35, 35))
         self.webButton_2_3.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_2_3.setMaximumSize(QtCore.QSize(35, 35))
@@ -620,7 +622,8 @@ class Ui_Form(object):
         self.webButton_2_3.setIcon(icon9)
         self.webButton_2_3.setIconSize(QtCore.QSize(20, 20))
         self.webButton_2_3.setObjectName(_fromUtf8("webButton_2_3"))
-        self.webButton_4_4 = QtGui.QPushButton(Form)
+        
+        self.webButton_4_4 = QWebButton(Form,".org")
         self.webButton_4_4.setGeometry(QtCore.QRect(490, 210, 35, 35))
         self.webButton_4_4.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_4_4.setMaximumSize(QtCore.QSize(35, 35))
@@ -629,7 +632,8 @@ class Ui_Form(object):
         self.webButton_4_4.setFont(font)
         self.webButton_4_4.setStyleSheet(_fromUtf8("color:#2496b6"))
         self.webButton_4_4.setObjectName(_fromUtf8("webButton_4_4"))
-        self.webButton_3_3 = QtGui.QPushButton(Form)
+        
+        self.webButton_3_3 = QWebButton(Form,".")
         self.webButton_3_3.setGeometry(QtCore.QRect(450, 170, 35, 35))
         self.webButton_3_3.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_3_3.setMaximumSize(QtCore.QSize(35, 35))
@@ -638,7 +642,8 @@ class Ui_Form(object):
         self.webButton_3_3.setFont(font)
         self.webButton_3_3.setStyleSheet(_fromUtf8("color:#2496b6"))
         self.webButton_3_3.setObjectName(_fromUtf8("webButton_3_3"))
-        self.webButton_1_5 = QtGui.QPushButton(Form)
+        
+        self.webButton_1_5 = QWebButton(Form,"config")
         self.webButton_1_5.setGeometry(QtCore.QRect(530, 90, 35, 35))
         self.webButton_1_5.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_1_5.setMaximumSize(QtCore.QSize(35, 35))
@@ -649,7 +654,8 @@ class Ui_Form(object):
         self.webButton_1_5.setIcon(icon10)
         self.webButton_1_5.setIconSize(QtCore.QSize(20, 20))
         self.webButton_1_5.setObjectName(_fromUtf8("webButton_1_5"))
-        self.webButton_3_5 = QtGui.QPushButton(Form)
+        
+        self.webButton_3_5 = QWebButton(Form,"_")
         self.webButton_3_5.setGeometry(QtCore.QRect(530, 170, 35, 35))
         self.webButton_3_5.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_3_5.setMaximumSize(QtCore.QSize(35, 35))
@@ -658,7 +664,8 @@ class Ui_Form(object):
         self.webButton_3_5.setFont(font)
         self.webButton_3_5.setStyleSheet(_fromUtf8("color:#2496b6"))
         self.webButton_3_5.setObjectName(_fromUtf8("webButton_3_5"))
-        self.webButton_4_1 = QtGui.QPushButton(Form)
+        
+        self.webButton_4_1 = QWebButton(Form,"www.")
         self.webButton_4_1.setGeometry(QtCore.QRect(370, 210, 35, 35))
         self.webButton_4_1.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_4_1.setMaximumSize(QtCore.QSize(35, 35))
@@ -667,7 +674,8 @@ class Ui_Form(object):
         self.webButton_4_1.setFont(font)
         self.webButton_4_1.setStyleSheet(_fromUtf8("color:#2496b6"))
         self.webButton_4_1.setObjectName(_fromUtf8("webButton_4_1"))
-        self.webButton_3_1 = QtGui.QPushButton(Form)
+        
+        self.webButton_3_1 = QWebButton(Form,"@")
         self.webButton_3_1.setGeometry(QtCore.QRect(370, 170, 35, 35))
         self.webButton_3_1.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_3_1.setMaximumSize(QtCore.QSize(35, 35))
@@ -676,7 +684,8 @@ class Ui_Form(object):
         self.webButton_3_1.setFont(font)
         self.webButton_3_1.setStyleSheet(_fromUtf8("color:#2496b6"))
         self.webButton_3_1.setObjectName(_fromUtf8("webButton_3_1"))
-        self.webButton_2_2 = QtGui.QPushButton(Form)
+        
+        self.webButton_2_2 = QWebButton(Form,"next")
         self.webButton_2_2.setGeometry(QtCore.QRect(410, 130, 35, 35))
         self.webButton_2_2.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_2_2.setMaximumSize(QtCore.QSize(35, 35))
@@ -687,7 +696,8 @@ class Ui_Form(object):
         self.webButton_2_2.setIcon(icon11)
         self.webButton_2_2.setIconSize(QtCore.QSize(20, 20))
         self.webButton_2_2.setObjectName(_fromUtf8("webButton_2_2"))
-        self.webButton_2_5 = QtGui.QPushButton(Form)
+        
+        self.webButton_2_5 = QWebButton(Form,"refresh")
         self.webButton_2_5.setGeometry(QtCore.QRect(530, 130, 35, 35))
         self.webButton_2_5.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_2_5.setMaximumSize(QtCore.QSize(35, 35))
@@ -698,7 +708,8 @@ class Ui_Form(object):
         self.webButton_2_5.setIcon(icon12)
         self.webButton_2_5.setIconSize(QtCore.QSize(20, 20))
         self.webButton_2_5.setObjectName(_fromUtf8("webButton_2_5"))
-        self.webButton_4_2 = QtGui.QPushButton(Form)
+        
+        self.webButton_4_2 = QWebButton(Form,".com")
         self.webButton_4_2.setGeometry(QtCore.QRect(410, 210, 35, 35))
         self.webButton_4_2.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_4_2.setMaximumSize(QtCore.QSize(35, 35))
@@ -707,7 +718,8 @@ class Ui_Form(object):
         self.webButton_4_2.setFont(font)
         self.webButton_4_2.setStyleSheet(_fromUtf8("color:#2496b6"))
         self.webButton_4_2.setObjectName(_fromUtf8("webButton_4_2"))
-        self.webButton_2_1 = QtGui.QPushButton(Form)
+        
+        self.webButton_2_1 = QWebButton(Form,"back")
         self.webButton_2_1.setGeometry(QtCore.QRect(370, 130, 35, 35))
         self.webButton_2_1.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_2_1.setMaximumSize(QtCore.QSize(35, 35))
@@ -718,7 +730,8 @@ class Ui_Form(object):
         self.webButton_2_1.setIcon(icon13)
         self.webButton_2_1.setIconSize(QtCore.QSize(20, 20))
         self.webButton_2_1.setObjectName(_fromUtf8("webButton_2_1"))
-        self.webButton_1_4 = QtGui.QPushButton(Form)
+        
+        self.webButton_1_4 = QWebButton(Form,"stop")
         self.webButton_1_4.setGeometry(QtCore.QRect(490, 90, 35, 35))
         self.webButton_1_4.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_1_4.setMaximumSize(QtCore.QSize(35, 35))
@@ -729,7 +742,8 @@ class Ui_Form(object):
         self.webButton_1_4.setIcon(icon14)
         self.webButton_1_4.setIconSize(QtCore.QSize(20, 20))
         self.webButton_1_4.setObjectName(_fromUtf8("webButton_1_4"))
-        self.webButton_3_4 = QtGui.QPushButton(Form)
+        
+        self.webButton_3_4 = QWebButton(Form,"-")
         self.webButton_3_4.setGeometry(QtCore.QRect(490, 170, 35, 35))
         self.webButton_3_4.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_3_4.setMaximumSize(QtCore.QSize(35, 35))
@@ -772,7 +786,8 @@ class Ui_Form(object):
         self.moveButton_2_1.setIcon(icon24)
         self.moveButton_2_1.setIconSize(QtCore.QSize(20, 20))
         self.moveButton_2_1.setObjectName(_fromUtf8("moveButton_2_1"))
-        self.webButton_back = QtGui.QPushButton(Form)
+        
+        self.webButton_back = QBackButton(Form)
         self.webButton_back.setGeometry(QtCore.QRect(530, 210, 35, 35))
         self.webButton_back.setMinimumSize(QtCore.QSize(35, 35))
         self.webButton_back.setMaximumSize(QtCore.QSize(35, 35))
@@ -1054,4 +1069,3 @@ class Ui_Form(object):
         self.moveButton_1_5.setText(QtGui.QApplication.translate("Form", "AvP", None, QtGui.QApplication.UnicodeUTF8))
         self.moveButton_1_2.setText(QtGui.QApplication.translate("Form", "Fin", None, QtGui.QApplication.UnicodeUTF8))
         self.moveButton_1_4.setText(QtGui.QApplication.translate("Form", "ReP", None, QtGui.QApplication.UnicodeUTF8))
-

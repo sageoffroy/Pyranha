@@ -1,9 +1,14 @@
 # -*- encoding: utf-8 -*-
+
 from operator import itemgetter
-from PyQt4.QtGui import QWidget, QApplication, QCursor
+from PyQt4.QtGui import QWidget, QApplication, QCursor, QMouseEvent, QPushButton
 from keyboardPyranha import Ui_Form
-from PyQt4.QtCore import Qt, QTimer, QPoint
+from PyQt4.QtCore import Qt, QTimer, QPoint, QEvent, QCoreApplication, pyqtSlot
 from PyQt4.QtTest import QTest
+from QWebButton import QWebButton
+from pymouse import PyMouse
+
+from predict import *
 
 #En los caso que se use python 3 QString no existe
 try:  
@@ -28,6 +33,9 @@ except AttributeError:
 
 class QKeyboardPyranha(QWidget):
     
+    verde='#44d51c'
+    celeste='#5599c8'
+    violeta='#865098'
     
     predectiveLineEditArray = []
     charModeArray = []
@@ -41,6 +49,11 @@ class QKeyboardPyranha(QWidget):
     mouseArrow1 = []
     mouseArrow2 = []
     mouseArrow3 = []
+
+    webArray1 = []
+    webArray2 = []
+    webArray3 = []
+    webArray4 = []
         
     mouseButtonArray = []
     moveButtonArray = []
@@ -65,37 +78,51 @@ class QKeyboardPyranha(QWidget):
         
         #Referencia al navegador para obtener el foco
         self.browser = browser
+        
         #Cargando interfaz y configurando botones
         self.keyboardUI = Ui_Form()
         self.keyboardUI.setupUi(self)
         self.setArray()
         self.setButtonFocusPolicy()
+        
+        #Instanciamos el predict
+        self.predict = predict()
+        self.buffer = QString()
+        self.refreshPredict('')
         #Comenzamos con la funcion mayuscula desactivada
         self.uppercase = False
+        
         #Configuramos las teclas
         self.configCharKeys()
         self.configFunctionKeys()
         self.configNumKeys()
         self.configModeKeys()
         self.configMouseKeys()
+        self.configWebKeys()
+        
         #Configuramos los modos
         self.configCharMode()
         self.configMouseMode()
+        self.configWebMode()
         
         self.setKeyStyleSheet()
+        
+        self.mouse = PyMouse()
         
         self.mode = "char1"
         self.activeClick = False
         self.currentKey = None
+        
         #self.setDefaultStyle(self.arrow3)
         self.setArrayStyle(self.predectiveLineEditArray,'red')
         self.timer = QTimer()
         self.timer.timeout.connect(self.tick)
-        self.timer.start(2000)
+        self.timer.start(1000)
         
         self.mouseTimer = QTimer()
         self.mouseTimer.timeout.connect(self.mouseTick)
-        
+        self.mouseY = 0
+        self.mouseX = 0
         self.mouseStop = False
         
     def setKeyStyleSheet(self):
@@ -110,6 +137,8 @@ class QKeyboardPyranha(QWidget):
     
         
     def click(self):
+        print(self.mode)
+        
         if (self.currentKey == self.keyboardUI.mouseButton_c):
             self.currentKey.clicked.emit(True)
         else:
@@ -128,74 +157,102 @@ class QKeyboardPyranha(QWidget):
             self.i = 0
     
     def tick(self):
-        print("tick")
-        self.setArrayStyle(self.array)
+
+        self.setArrayStyle(self.array)        
         
         if(self.mode == "char1"):
-            print("Char 2")
+            #print("Char 2")
             self.mode = "char2"
-            self.setArrayStyle(self.modeButtonArray,'red')
+            self.setArrayStyle(self.modeButtonArray, 'red')
         elif (self.mode == "char2"):
-            print("Char 3")
+            #print("Char 3")
             self.setArrayStyle(self.funButtonArray,'red')
             self.mode = "char3"
         elif (self.mode == "char3"):
-            print("Char 4_1")
+            #print("Char 4_1")
             self.mode = "char4_1"
             self.setArrayStyle(self.charArrow1,'red')
         elif (self.mode == "char4_1"):
-            print("Char 4_2")
+            #print("Char 4_2")
             self.mode = "char4_2"
             self.setArrayStyle(self.charArrow2,'red')
         elif (self.mode == "char4_2"):
-            print("Char 4_3")
+            #print("Char 4_3")
             self.mode = "char4_3"
             self.setArrayStyle(self.charArrow3,'red')
         elif (self.mode == "char4_3"):
-            print("Char 1")
+            #print("Char 1")
             self.mode = "char1"
             self.setArrayStyle(self.predectiveLineEditArray,'red')
         elif (self.mode == "mouse1"):
             self.mouseStop = False
-            print("mouse2")
+            #print("mouse2")
             self.mode = "mouse2"
             self.setArrayStyle(self.mouseArrow2,'red')
         elif (self.mode == "mouse2"):
-            print("mouse3")
+            #print("mouse3")
             self.mode = "mouse3"
             self.setArrayStyle(self.mouseArrow3,'red')
         elif (self.mode == "mouse3"):
-            print("mouse1")
+            #print("mouse1")
             self.mode = "mouse1"
             self.setArrayStyle(self.mouseArrow1,'red')
+        elif (self.mode == "web1"):
+            print("web1")
+            self.mode = "web2"
+            self.setArrayStyle(self.webArray1,'red')
+        elif (self.mode == "web2"):
+            print("web2")
+            self.mode = "web3"
+            self.setArrayStyle(self.webArray2,'red')
+        elif (self.mode == "web3"):
+            print("web3")
+            self.mode = "web4"
+            self.setArrayStyle(self.webArray3,'red')
+        elif (self.mode == "web4"):
+            print("web4")
+            self.mode = "web1"
+            self.setArrayStyle(self.webArray4,'red')
             
     def tick2(self):
-        print("tick 2")
+        #print("tick 2")
         if (self.i > len(self.array)-1):
-            
-            #self.timer.timeout.disconnect(self.tick2)
             self.i = 0
-            #self.timer.timeout.connect(self.tick)
-            self.mode = "char4_3"
-            self.setArrayStyle(self.array, 'white')
         
-        else:
-            self.setArrayStyle(self.array, 'red')
-            self.currentKey = self.array[self.i] 
-            self.setKeyStyle(self.array[self.i], 'blue')
-            
-            self.i+=1
+        self.setArrayStyle(self.array, 'red')
+        self.currentKey = self.array[self.i] 
+        self.setKeyStyle(self.array[self.i],'blue')
+        
+        self.i+=1
         
     
     def setArrayStyle(self, array, border_color='white'):
         self.array = array
+        
         for widget in array:
             self.setKeyStyle(widget, border_color)
 
-    def setKeyStyle(self, w, border_color='white'):
-        style = 'color:#44d51C;border-radius: 8px;border-style: outset;border-width: 1px;border-color:'+border_color+';background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #888888, stop: 0.1 #222222);'
-        w.setStyleSheet(style)
+    def setKeyStyle(self, k, border_color='white'):
+        color = self.verde
         
+        if(type(self.array[0]) is QWebButton):
+           color = self.celeste
+        if(type(self.array[0]) is QWebButton):
+           color = self.celeste
+        
+        style = 'color:'+color+';border-radius: 8px;border-style: outset;border-width: 1px;border-color:'+border_color+';background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #888888, stop: 0.1 #222222);'
+        k.setStyleSheet(style)
+        
+    #-- Metodo que refresca el texto predictivo --#
+    def refreshPredict(self, s):
+        s = QString(s)
+        print (s.length())
+        
+        self.buffer.append(s)
+        self.listPredict = self.predict.prediction (self.buffer)
+        self.keyboardUI.predectiveLineEdit_1.setText(self.listPredict[0]) 
+        self.keyboardUI.predectiveLineEdit_2.setText(self.listPredict[1])
+        self.keyboardUI.predectiveLineEdit_3.setText(self.listPredict[2])
     
     def configMouseMode(self):
         for key in self.mouseButtonArray:
@@ -208,7 +265,6 @@ class QKeyboardPyranha(QWidget):
                 self.mouseArrow3.append(key)
     
     def configCharMode(self):
-        #self.setCharModeArray()
         for key in self.charButtonArray:
                 None
                 if (key.pos().y()==130):
@@ -217,13 +273,32 @@ class QKeyboardPyranha(QWidget):
                     self.charArrow2.append(key)
                 elif (key.pos().y()==210):
                     self.charArrow3.append(key)
-      
+    
+    def configWebMode(self):
+        for key in self.webButtonArray:
+                None
+                if (key.pos().y()==90):
+                    self.webArray1.append(key)
+                elif (key.pos().y()==130):
+                    self.webArray2.append(key)
+                elif (key.pos().y()==170):
+                    self.webArray3.append(key)
+                elif (key.pos().y()==210):
+                    self.webArray4.append(key)
+    
     def configMouseKeys(self):
         for key in self.mouseButtonArray:
             if (key.accessibleName()=="back"):
                 key.clicked.connect(self.backButtonClicked)
             else:
                 key.clicked.connect(self.mouseButtonClicked)
+                
+    def configWebKeys(self):
+        for key in self.webButtonArray:
+            if (key.accessibleName()=="back"):
+                key.clicked.connect(self.backButtonClicked)
+            else:
+                key.clicked.connect(self.webButtonClicked)
             
             
     def configModeKeys(self):
@@ -237,6 +312,10 @@ class QKeyboardPyranha(QWidget):
             key.char =char[0]
             key.setText(_translate("Form", char[0], None)) 
             key.clicked.connect(self.charButtonClicked)
+            
+        self.predectiveLineEditArray[0].clicked.connect(self.charButtonClicked)
+        self.predectiveLineEditArray[1].clicked.connect(self.charButtonClicked)
+        self.predectiveLineEditArray[2].clicked.connect(self.charButtonClicked)
     
     def configFunctionKeys(self):
         functionList = sorted(self.functionDict.items(), key=itemgetter(1),reverse=True)
@@ -260,30 +339,68 @@ class QKeyboardPyranha(QWidget):
             key.setText(_translate("Form", num[0], None)) 
             key.clicked.connect(self.charButtonClicked)
     
+    @pyqtSlot()
     def mouseButtonClicked(self):
         act = self.sender().action
-        self.mouseX = 0
-        self.mouseY = 0
-        self.mouseTimer.start(20)
-        self.timer.stop()
-        
-        self.setArrayStyle(self.array, 'white')
-        self.currentKey = self.keyboardUI.mouseButton_c
-        self.setKeyStyle(self.currentKey, 'blue')
+        print("Action = "+ act)
+        if((act != "c") and (act != "cl") and (act != "cr")):
+            print ("necesita frenar")
+            self.mouseTimer.start(20)
+            self.timer.stop()
+            self.setArrayStyle(self.array, 'white')
+            self.currentKey = self.keyboardUI.mouseButton_c
+            self.setKeyStyle(self.currentKey, 'blue')
         
         if(act == "u"):
+            self.mouseX = 0
             self.mouseY = -1  
         elif(act == "l"):
             self.mouseX = -1
+            self.mouseY = 0
         elif(act == "r"):
             self.mouseX = 1
+            self.mouseY = 0
         elif(act == "d"):
+            self.mouseX = 0
             self.mouseY = 1
+        elif(act == "lu"):
+            self.mouseY = -1
+            self.mouseX = -1
+        elif(act == "ru"):
+            self.mouseY = -1
+            self.mouseX = 1
+        elif(act == "ld"):
+            self.mouseY = 1
+            self.mouseX = -1
+        elif(act == "rd"):
+            self.mouseY = 1
+            self.mouseX = 1
         elif(act == "c"):
-            self.timer.start(2000)
-            self.mouseTimer.stop()
-            self.currentKey = None
+            if ((self.mouseX != 0) or (self.mouseY != 0)):
+                self.mouseY = 0
+                self.mouseX = 0
+                self.timer.start(1000)
+                self.mouseTimer.stop()
+                self.setKeyStyle(self.currentKey, 'white')
+                self.currentKey = None
+            else:
+                print("EL mouse esta quieto")
+            
+        elif(act == "cr"):
+            print("Click derecho")
+            
+            self.mouse.click(self.mousePos.x(), self.mousePos.y(), 2)
+            
+            
         
+        elif(act == "cl"):
+            print("Click izquierdo")
+
+            self.mouse.click(self.mousePos.x(), self.mousePos.y(), 1)
+            
+            
+        
+    
     def mouseTick(self):
         self.mouseCursor = QCursor()
         self.mousePos = self.mouseCursor.pos()
@@ -291,21 +408,44 @@ class QKeyboardPyranha(QWidget):
         
     def modeButtonClicked(self):
         print(self.sender().mode + " clicked")
-        
         if (self.sender().mode == "mouse"):
             self.mode = self.sender().mode+"3"
         elif self.sender().mode == "voice":
-	    opc = self.browser.voice.start(self.browser.COMMAND)
-	    self.browser.commandHandler(opc,'')
-	elif self.sender().mode == "hand":
+            opc = self.browser.voice.start(self.browser.COMMAND)
+            self.browser.commandHandler(opc,'')
+        elif self.sender().mode == "hand":
             opc = self.browser.handDetector.start()        
             self.browser.commandHandler(opc,'')
+        elif self.sender().mode == "web":
+	    self.mode = "web1"
+	    
+                    
+    def webButtonClicked(self):
+      print("Mode Web")
+      if(self.sender().web_function=="go"):
+          print "go"
+      if(self.sender().web_function=="home"):
+          self.browser.loadURL(self.browser.web, self.browser.default_url)
+      if(self.sender().web_function=="new_tab"):
+          self.browser.createTab(self.browser.default_url)
+      if(self.sender().web_function=="stop"):
+          self.browser.stop()
+      if(self.sender().web_function=="refresh"):
+          self.browser.reload()
+      #if(self.sender().web_function==""):
+      #if(self.sender().web_function==""):
+    
     def charButtonClicked(self):
         print("Char Clicked")
         if self.uppercase:
-            QTest.keyClick(self.browser.focusWidget(), self.sender().char.upper())
+            key =  self.sender().text().toUpper()
         else:
-            QTest.keyClick(self.browser.focusWidget(), self.sender().char)
+            key =  self.sender().text()
+        self.refreshPredict(key)
+        print(self.browser.focusWidget().text())
+        for c in key:
+            QTest.keyClick(self.browser.focusWidget(), c)
+            
         
     def functionButtonClicked(self):
         if self.sender().function == "May":
@@ -350,7 +490,6 @@ class QKeyboardPyranha(QWidget):
             QTest.keyClick(self.browser.focusWidget(), Qt.Key_Shift)
     
     def backButtonClicked(self):
-        self.setArrayStyle(self.array)
         self.mode = "char4_3"
     
     def charButtonsUpper(self, Form):

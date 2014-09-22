@@ -1,9 +1,10 @@
+import sys
 import requests
 from pyaudio import PyAudio, paInt16
 from wave import open as open_audio
 from os import system
 from json import loads
-
+from ruido import *
 
 class Vox:
     
@@ -23,6 +24,7 @@ class Vox:
         stream = audio.open(input_device_index=device_i,output_device_index=device_i,format=self.format, channels=self.channel,
                             rate=self.rate, input=True,
                             frames_per_buffer=self.chunk)
+        playDing()
         print "REC: "
         frames = []
         for i in range(0, self.rate / self.chunk * time):
@@ -52,7 +54,7 @@ class Vox:
         """Metodo para convertir grabaciones de voz a texto, usando la api de google a traves de internet"""
         #rec --encoding signed-integer --bits 16 --channels 1 --rate 16000 test.wav
         url = 'https://www.google.com/speech-api/v2/recognize?output=json&lang=es-ar&key=AIzaSyBOti4mM-6x9WDnZIjIeyEU21OpBXqWBgw'
-        audio = open(file,'rb').read()
+        audio = open("sound/tmp/audio",'rb').read()
         headers = {'Content-Type': 'audio/l16; rate=16000;'}
         respuesta = requests.post(url,data=audio,headers=headers)
         try:
@@ -87,6 +89,16 @@ class Vox:
                     elif c == 'recarga':
 		        #reload(self)
 		        return 4
+		    elif c == 'video':
+		        #reload(self)
+		        return 5
+		    elif c == 'musica':
+		        #reload(self)
+		        return 6
+		    elif c == 'deporte':
+		        #reload(self)
+		        return 7
+		      
         return opc
       
     def start(self,commands):
