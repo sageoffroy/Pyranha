@@ -85,7 +85,7 @@ class PyranhaBrowser(QMainWindow):
         print(listQuick)
         for l in listQuick:
 	    self.QUICK.update({str(l[0]):str(l[1])})
-	print(self.QUICK)
+        print(self.QUICK)
         self.sql.close_connection()
 
     def initGui(self):
@@ -99,7 +99,6 @@ class PyranhaBrowser(QMainWindow):
         self.mainLayout.addWidget(self.keyboard)
         self.centerWidget(self.mainLayout, self.keyboard)
        
-        #self.createNavBar()
         self.setCss()
         self.setCentralWidget(self.centralwidget)
         
@@ -112,6 +111,12 @@ class PyranhaBrowser(QMainWindow):
                 self.keyboard.click()
             else:
                 QLineEdit.keyPressEvent(self.focusWidget(), event)
+    
+    def hideKeyboard(self):
+        self.keyboard.hide()
+        
+    def showKeyboard(self):
+        self.keyboard.show()
         
     def onResize(self, event):
         self.centerWidget(self.tabLayout, self.keyboard)
@@ -119,6 +124,7 @@ class PyranhaBrowser(QMainWindow):
     def loadHome(self):
         #self.createTab(self.default_url)
         self.createTab("https://www.google.com")
+        self.createTab("https://www.facebook.com")
         #self.createTab("http://www.ole.com.ar")
         #self.createTab("http://www.tekoavirtual.chubut.edu.ar")
         #self.createTab("http://www.chubut.edu.ar")
@@ -265,10 +271,7 @@ class PyranhaBrowser(QMainWindow):
 
 
     """ Aca se deberia mostrar el teclado """
-    def showKeyboard(self):
-        print("Mostrar Teclado")
-
-
+    
     def commandHandler(self,opc,extra):
         
         if opc == 1:

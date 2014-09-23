@@ -6,6 +6,7 @@ from keyboardPyranha import Ui_Form
 from PyQt4.QtCore import Qt, QTimer, QPoint, QEvent, QCoreApplication, pyqtSlot
 from PyQt4.QtTest import QTest
 from QWebButton import QWebButton
+from QMoveButton import QMoveButton
 from pymouse import PyMouse
 
 from predict import *
@@ -89,6 +90,7 @@ class QKeyboardPyranha(QWidget):
         self.predict = predict()
         self.buffer = QString()
         self.refreshPredict('')
+        
         #Comenzamos con la funcion mayuscula desactivada
         self.uppercase = False
         
@@ -113,7 +115,6 @@ class QKeyboardPyranha(QWidget):
         self.activeClick = False
         self.currentKey = None
         
-        #self.setDefaultStyle(self.arrow3)
         self.setArrayStyle(self.predectiveLineEditArray,'red')
         self.timer = QTimer()
         self.timer.timeout.connect(self.tick)
@@ -137,9 +138,12 @@ class QKeyboardPyranha(QWidget):
     
         
     def click(self):
-        print(self.mode)
-        
-        if (self.currentKey == self.keyboardUI.mouseButton_c):
+        #print(self.mode)
+        if(self.mode == "off"):
+            print("tratando de mostrar")
+            self.browser.showKeyboard()
+            self.mode = "char1"
+        elif (self.currentKey == self.keyboardUI.mouseButton_c):
             self.currentKey.clicked.emit(True)
         else:
             if (self.activeClick):
@@ -213,6 +217,9 @@ class QKeyboardPyranha(QWidget):
             print("web4")
             self.mode = "web1"
             self.setArrayStyle(self.webArray4,'red')
+        elif (self.mode == "off"):
+            None
+            
             
     def tick2(self):
         #print("tick 2")
@@ -228,7 +235,6 @@ class QKeyboardPyranha(QWidget):
     
     def setArrayStyle(self, array, border_color='white'):
         self.array = array
-        
         for widget in array:
             self.setKeyStyle(widget, border_color)
 
@@ -237,8 +243,8 @@ class QKeyboardPyranha(QWidget):
         
         if(type(self.array[0]) is QWebButton):
            color = self.celeste
-        if(type(self.array[0]) is QWebButton):
-           color = self.celeste
+        if(type(self.array[0]) is QMoveButton):
+           color = self.violeta
         
         style = 'color:'+color+';border-radius: 8px;border-style: outset;border-width: 1px;border-color:'+border_color+';background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #888888, stop: 0.1 #222222);'
         k.setStyleSheet(style)
@@ -408,6 +414,7 @@ class QKeyboardPyranha(QWidget):
         
     def modeButtonClicked(self):
         print(self.sender().mode + " clicked")
+        
         if (self.sender().mode == "mouse"):
             self.mode = self.sender().mode+"3"
         elif self.sender().mode == "voice":
@@ -417,9 +424,11 @@ class QKeyboardPyranha(QWidget):
             opc = self.browser.handDetector.start()        
             self.browser.commandHandler(opc,'')
         elif self.sender().mode == "web":
-	    self.mode = "web1"
-	    
-                    
+            self.mode = "web1"
+        elif self.sender().mode == "off":
+            self.mode = "off"
+            self.browser.hideKeyboard()
+    
     def webButtonClicked(self):
       print("Mode Web")
       if(self.sender().web_function=="go"):
@@ -508,6 +517,11 @@ class QKeyboardPyranha(QWidget):
         for p in self.predectiveLineEditArray:
             p.setFocusPolicy(Qt.NoFocus)  
     
+    
+    def destroyKeys(self):
+        for a in self.buttonArray:
+            for k in a:
+                k.hide()
     
     def setArray(self):
         #Cargando caracteres
