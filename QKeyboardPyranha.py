@@ -7,6 +7,7 @@ from PyQt4.QtCore import Qt, QTimer, QPoint, QEvent, QCoreApplication, pyqtSlot
 from PyQt4.QtTest import QTest
 from QWebButton import QWebButton
 from QMoveButton import QMoveButton
+from QNumberButton import QNumberButton
 from pymouse import PyMouse
 
 from predict import *
@@ -37,6 +38,7 @@ class QKeyboardPyranha(QWidget):
     verde='#44d51c'
     celeste='#5599c8'
     violeta='#865098'
+    rojo='#FF0000'
     
     predectiveLineEditArray = []
     charModeArray = []
@@ -47,14 +49,17 @@ class QKeyboardPyranha(QWidget):
     charArrow2 = []
     charArrow3 = []
     
-    mouseArrow1 = []
-    mouseArrow2 = []
-    mouseArrow3 = []
+    mouseArray1 = []
+    mouseArray2 = []
+    mouseArray3 = []
 
     webArray1 = []
     webArray2 = []
     webArray3 = []
     webArray4 = []
+    
+    moveArray1 = []
+    moveArray2 = []
         
     mouseButtonArray = []
     moveButtonArray = []
@@ -101,16 +106,17 @@ class QKeyboardPyranha(QWidget):
         self.configModeKeys()
         self.configMouseKeys()
         self.configWebKeys()
+        self.configMoveKeys()
         
         #Configuramos los modos
         self.configCharMode()
         self.configMouseMode()
         self.configWebMode()
+        self.configMoveMode()
+        
         
         self.setKeyStyleSheet()
-        
         self.mouse = PyMouse()
-        
         self.mode = "char1"
         self.activeClick = False
         self.currentKey = None
@@ -190,17 +196,14 @@ class QKeyboardPyranha(QWidget):
             self.setArrayStyle(self.predectiveLineEditArray,'red')
         elif (self.mode == "mouse1"):
             self.mouseStop = False
-            #print("mouse2")
             self.mode = "mouse2"
-            self.setArrayStyle(self.mouseArrow2,'red')
+            self.setArrayStyle(self.mouseArray1,'red')
         elif (self.mode == "mouse2"):
-            #print("mouse3")
             self.mode = "mouse3"
-            self.setArrayStyle(self.mouseArrow3,'red')
+            self.setArrayStyle(self.mouseArray2,'red')
         elif (self.mode == "mouse3"):
-            #print("mouse1")
             self.mode = "mouse1"
-            self.setArrayStyle(self.mouseArrow1,'red')
+            self.setArrayStyle(self.mouseArray3,'red')
         elif (self.mode == "web1"):
             print("web1")
             self.mode = "web2"
@@ -217,6 +220,14 @@ class QKeyboardPyranha(QWidget):
             print("web4")
             self.mode = "web1"
             self.setArrayStyle(self.webArray4,'red')
+        elif (self.mode == "move1"):
+            print("move1")
+            self.mode = "move2"
+            self.setArrayStyle(self.moveArray1,'red')
+        elif (self.mode == "move2"):
+            print("move2")
+            self.mode = "move1"
+            self.setArrayStyle(self.moveArray2,'red')
         elif (self.mode == "off"):
             None
             
@@ -243,8 +254,12 @@ class QKeyboardPyranha(QWidget):
         
         if(type(self.array[0]) is QWebButton):
            color = self.celeste
+        
         if(type(self.array[0]) is QMoveButton):
            color = self.violeta
+        
+        if(type(self.array[0]) is QNumberButton):
+           color = self.rojo
         
         style = 'color:'+color+';border-radius: 8px;border-style: outset;border-width: 1px;border-color:'+border_color+';background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #888888, stop: 0.1 #222222);'
         k.setStyleSheet(style)
@@ -259,38 +274,19 @@ class QKeyboardPyranha(QWidget):
         self.keyboardUI.predectiveLineEdit_1.setText(self.listPredict[0]) 
         self.keyboardUI.predectiveLineEdit_2.setText(self.listPredict[1])
         self.keyboardUI.predectiveLineEdit_3.setText(self.listPredict[2])
-    
+
+#======================================================================================================#
+#====================================MOUSE MODE========================================================#
+#======================================================================================================#
     def configMouseMode(self):
         for key in self.mouseButtonArray:
             None
             if (key.pos().y()==10):
-                self.mouseArrow1.append(key)
+                self.mouseArray1.append(key)
             elif (key.pos().y()==50):
-                self.mouseArrow2.append(key)
+                self.mouseArray2.append(key)
             elif (key.pos().y()==90):
-                self.mouseArrow3.append(key)
-    
-    def configCharMode(self):
-        for key in self.charButtonArray:
-                None
-                if (key.pos().y()==130):
-                    self.charArrow1.append(key)
-                elif (key.pos().y()==170):
-                    self.charArrow2.append(key)
-                elif (key.pos().y()==210):
-                    self.charArrow3.append(key)
-    
-    def configWebMode(self):
-        for key in self.webButtonArray:
-                None
-                if (key.pos().y()==90):
-                    self.webArray1.append(key)
-                elif (key.pos().y()==130):
-                    self.webArray2.append(key)
-                elif (key.pos().y()==170):
-                    self.webArray3.append(key)
-                elif (key.pos().y()==210):
-                    self.webArray4.append(key)
+                self.mouseArray3.append(key)
     
     def configMouseKeys(self):
         for key in self.mouseButtonArray:
@@ -298,52 +294,6 @@ class QKeyboardPyranha(QWidget):
                 key.clicked.connect(self.backButtonClicked)
             else:
                 key.clicked.connect(self.mouseButtonClicked)
-                
-    def configWebKeys(self):
-        for key in self.webButtonArray:
-            if (key.accessibleName()=="back"):
-                key.clicked.connect(self.backButtonClicked)
-            else:
-                key.clicked.connect(self.webButtonClicked)
-            
-            
-    def configModeKeys(self):
-        for key in self.modeButtonArray:
-            key.clicked.connect(self.modeButtonClicked)
-        
-    def configCharKeys(self):
-        charList = sorted(self.charDict.items(), key=itemgetter(1),reverse=True)
-        print (charList)
-        for key,char in zip(self.charButtonArray, charList):
-            key.char =char[0]
-            key.setText(_translate("Form", char[0], None)) 
-            key.clicked.connect(self.charButtonClicked)
-            
-        self.predectiveLineEditArray[0].clicked.connect(self.charButtonClicked)
-        self.predectiveLineEditArray[1].clicked.connect(self.charButtonClicked)
-        self.predectiveLineEditArray[2].clicked.connect(self.charButtonClicked)
-    
-    def configFunctionKeys(self):
-        functionList = sorted(self.functionDict.items(), key=itemgetter(1),reverse=True)
-        print (functionList)
-        
-        for key,fun in zip(self.funButtonArray, functionList):
-            key.function =fun[0]
-            key.setText(_translate("Form", fun[0], None)) 
-            key.clicked.connect(self.functionButtonClicked)
-    
-    def configNumKeys(self):
-        numList = sorted(self.numDict.items(), key=itemgetter(1),reverse=True)
-        operList = sorted(self.operNumDict.items(), key=itemgetter(1),reverse=True)
-        numList = numList + operList
-        #operAndNumDict = self.numDict
-        #operAndNumDict.update(self.operNumDict)
-        print (numList)
-        #print (operAndNumDict)
-        for key,num in zip(self.numButtonArray, numList):
-            key.char =num[0]
-            key.setText(_translate("Form", num[0], None)) 
-            key.clicked.connect(self.charButtonClicked)
     
     @pyqtSlot()
     def mouseButtonClicked(self):
@@ -391,58 +341,40 @@ class QKeyboardPyranha(QWidget):
                 self.currentKey = None
             else:
                 print("EL mouse esta quieto")
-            
         elif(act == "cr"):
             print("Click derecho")
-            
             self.mouse.click(self.mousePos.x(), self.mousePos.y(), 2)
-            
-            
-        
         elif(act == "cl"):
             print("Click izquierdo")
-
             self.mouse.click(self.mousePos.x(), self.mousePos.y(), 1)
-            
-            
-        
     
     def mouseTick(self):
         self.mouseCursor = QCursor()
         self.mousePos = self.mouseCursor.pos()
         self.mouseCursor.setPos(QPoint(self.mousePos.x()+self.mouseX,self.mousePos.y()+self.mouseY))
-        
-    def modeButtonClicked(self):
-        print(self.sender().mode + " clicked")
-        
-        if (self.sender().mode == "mouse"):
-            self.mode = self.sender().mode+"3"
-        elif self.sender().mode == "voice":
-            opc = self.browser.voice.start(self.browser.COMMAND)
-            self.browser.commandHandler(opc,'')
-        elif self.sender().mode == "hand":
-            opc = self.browser.handDetector.start()        
-            self.browser.commandHandler(opc,'')
-        elif self.sender().mode == "web":
-            self.mode = "web1"
-        elif self.sender().mode == "off":
-            self.mode = "off"
-            self.browser.hideKeyboard()
-    
-    def webButtonClicked(self):
-      print("Mode Web")
-      if(self.sender().web_function=="go"):
-          print "go"
-      if(self.sender().web_function=="home"):
-          self.browser.loadURL(self.browser.web, self.browser.default_url)
-      if(self.sender().web_function=="new_tab"):
-          self.browser.createTab(self.browser.default_url)
-      if(self.sender().web_function=="stop"):
-          self.browser.stop()
-      if(self.sender().web_function=="refresh"):
-          self.browser.reload()
-      #if(self.sender().web_function==""):
-      #if(self.sender().web_function==""):
+#======================================================================================================#
+#=====================================CHAR MODE========================================================#
+#======================================================================================================#
+    def configCharMode(self):
+        for key in self.charButtonArray:
+                if (key.pos().y()==130):
+                    self.charArrow1.append(key)
+                elif (key.pos().y()==170):
+                    self.charArrow2.append(key)
+                elif (key.pos().y()==210):
+                    self.charArrow3.append(key)
+                    
+    def configCharKeys(self):
+        charList = sorted(self.charDict.items(), key=itemgetter(1),reverse=True)
+        print (charList)
+        for key,char in zip(self.charButtonArray, charList):
+            key.char =char[0]
+            key.setText(_translate("Form", char[0], None)) 
+            key.clicked.connect(self.charButtonClicked)
+            
+        self.predectiveLineEditArray[0].clicked.connect(self.charButtonClicked)
+        self.predectiveLineEditArray[1].clicked.connect(self.charButtonClicked)
+        self.predectiveLineEditArray[2].clicked.connect(self.charButtonClicked)
     
     def charButtonClicked(self):
         print("Char Clicked")
@@ -454,8 +386,19 @@ class QKeyboardPyranha(QWidget):
         print(self.browser.focusWidget().text())
         for c in key:
             QTest.keyClick(self.browser.focusWidget(), c)
-            
+    
+#======================================================================================================#
+#===================================FUNCTION MODE======================================================#
+#======================================================================================================#
+    def configFunctionKeys(self):
+        functionList = sorted(self.functionDict.items(), key=itemgetter(1),reverse=True)
+        print (functionList)
         
+        for key,fun in zip(self.funButtonArray, functionList):
+            key.function =fun[0]
+            key.setText(_translate("Form", fun[0], None)) 
+            key.clicked.connect(self.functionButtonClicked)
+    
     def functionButtonClicked(self):
         if self.sender().function == "May":
             print("Funcion May presionada")
@@ -498,6 +441,126 @@ class QKeyboardPyranha(QWidget):
             print("Funcion Ctl presionada")
             QTest.keyClick(self.browser.focusWidget(), Qt.Key_Shift)
     
+#======================================================================================================#
+#======================================WEB MODE========================================================#
+#======================================================================================================#
+    def configWebMode(self):
+        for key in self.webButtonArray:
+            if (key.pos().y()==90):
+                self.webArray1.append(key)
+            elif (key.pos().y()==130):
+                self.webArray2.append(key)
+            elif (key.pos().y()==170):
+                self.webArray3.append(key)
+            elif (key.pos().y()==210):
+                self.webArray4.append(key)
+    
+    def configWebKeys(self):
+        for key in self.webButtonArray:
+            if (key.accessibleName()=="back"):
+                key.clicked.connect(self.backButtonClicked)
+            else:
+                key.clicked.connect(self.webButtonClicked)
+    
+    def webButtonClicked(self):
+        print("Mode Web")
+        if(self.sender().web_function=="go"):
+            print "go"
+        if(self.sender().web_function=="home"):
+            self.browser.loadURL(self.browser.web, self.browser.default_url)
+        if(self.sender().web_function=="new_tab"):
+            self.browser.createTab(self.browser.default_url)
+        if(self.sender().web_function=="stop"):
+            self.browser.stop()
+        if(self.sender().web_function=="refresh"):
+            self.browser.reload()
+        #if(self.sender().web_function==""):
+        #if(self.sender().web_function==""):
+    
+#======================================================================================================#
+#=====================================MOVE MODE========================================================#
+#======================================================================================================#
+    def configMoveMode(self):
+        for key in self.moveButtonArray:
+            if (key.pos().y()==10):
+                self.moveArray1.append(key)
+            elif (key.pos().y()==50):
+                self.moveArray2.append(key)
+            
+    def configMoveKeys(self):
+        for key in self.moveButtonArray:
+            if (key.accessibleName()=="back"):
+                key.clicked.connect(self.backButtonClicked)
+            else:
+                key.clicked.connect(self.moveButtonClicked)
+    
+    def moveButtonClicked(self):
+        print(self.sender().move_function + " clicked")
+        
+        if self.sender().move_function == 'tab':
+            QTest.keyClick(self.browser.focusWidget(), Qt.Key_Tab)
+        if self.sender().move_function == 'fin':
+            QTest.keyClick(self.browser.focusWidget(), Qt.Key_End)
+        if self.sender().move_function == 'ini':
+            QTest.keyClick(self.browser.focusWidget(), Qt.Key_Home)
+        if self.sender().move_function == 'rep':
+            QTest.keyClick(self.browser.focusWidget(), Qt.Key_PageUp)
+        if self.sender().move_function == 'avp':
+            QTest.keyClick(self.browser.focusWidget(), Qt.Key_PageDown)
+        if self.sender().move_function == 'left':
+            QTest.keyClick(self.browser.focusWidget(), Qt.Key_Left)
+        if self.sender().move_function == 'right':
+            QTest.keyClick(self.browser.focusWidget(), Qt.Key_Right)
+        if self.sender().move_function == 'up':
+            QTest.keyClick(self.browser.focusWidget(), Qt.Key_Up)
+        if self.sender().move_function == 'down':
+            QTest.keyClick(self.browser.focusWidget(), Qt.Key_Down)
+        """elif self.sender().mode == "hand":
+            opc = self.browser.handDetector.start()        
+            self.browser.commandHandler(opc,'')
+        elif self.sender().mode == "off":
+            self.mode = "off"
+            self.browser.hideKeyboard()
+        else:
+            self.mode = self.sender().mode+'1'"""
+    
+    
+                
+#======================================================================================================#
+#====================================OTROS=============================================================#
+#======================================================================================================#
+    
+    def configModeKeys(self):
+        for key in self.modeButtonArray:
+            key.clicked.connect(self.modeButtonClicked)
+        
+    def configNumKeys(self):
+        numList = sorted(self.numDict.items(), key=itemgetter(1),reverse=True)
+        operList = sorted(self.operNumDict.items(), key=itemgetter(1),reverse=True)
+        numList = numList + operList
+        #operAndNumDict = self.numDict
+        #operAndNumDict.update(self.operNumDict)
+        print (numList)
+        #print (operAndNumDict)
+        for key,num in zip(self.numButtonArray, numList):
+            key.char =num[0]
+            key.setText(_translate("Form", num[0], None)) 
+            key.clicked.connect(self.charButtonClicked)
+    
+    def modeButtonClicked(self):
+        print(self.sender().mode + " clicked")
+        if self.sender().mode == "voice":
+            opc = self.browser.voice.start(self.browser.COMMAND)
+            self.browser.commandHandler(opc,'')
+        elif self.sender().mode == "hand":
+            opc = self.browser.handDetector.start()        
+            self.browser.commandHandler(opc,'')
+        elif self.sender().mode == "off":
+            self.mode = "off"
+            self.browser.hideKeyboard()
+        else:
+            self.mode = self.sender().mode+"1"
+         
     def backButtonClicked(self):
         self.mode = "char4_3"
     
@@ -517,11 +580,10 @@ class QKeyboardPyranha(QWidget):
         for p in self.predectiveLineEditArray:
             p.setFocusPolicy(Qt.NoFocus)  
     
-    
-    def destroyKeys(self):
+    """def destroyKeys(self):
         for a in self.buttonArray:
             for k in a:
-                k.hide()
+                k.hide()"""
     
     def setArray(self):
         #Cargando caracteres
@@ -651,4 +713,5 @@ class QKeyboardPyranha(QWidget):
         self.buttonArray.append(self.funButtonArray)
         self.buttonArray.append(self.modeButtonArray)
         self.buttonArray.append(self.numButtonArray)
+        
         

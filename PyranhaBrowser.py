@@ -178,7 +178,7 @@ class PyranhaBrowser(QMainWindow):
         self.tabLayout.addWidget(self.web)
         
         #-- Cargando keyboard
-        #self.keyboardLayout=QHBoxLayout()
+        #self.keyboardLayout=QHBoxLayout()    
         #self.keyboardLayout.setMargin(0)
         #self.keyboardLayout.setSpacing(0)
         ##tabLayout.addLayout(self.keyboardLayout)
@@ -216,7 +216,7 @@ class PyranhaBrowser(QMainWindow):
             self.setWindowTitle("Pyranha  " + child.title())
             #for child in self.tabBarWidget.widget(num).findChildren(QLineEdit):
             #self.focusURLBox(child)
-
+    
     def loadFinished(self, web, urlBox):
         print("Load Finished")
         urlBox.setText(web.url().scheme()+"://" + web.url().host())
