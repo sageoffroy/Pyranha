@@ -107,7 +107,6 @@ class PyranhaBrowser(QMainWindow):
             None
         else:
             if type(event) == QKeyEvent and event.key() == Qt.Key_AltGr: 
-                print("Pulsador")
                 self.keyboard.click()
             else:
                 QLineEdit.keyPressEvent(self.focusWidget(), event)

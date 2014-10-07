@@ -69,7 +69,7 @@ class QKeyboardPyranha(QWidget):
     
     buttonArray = []
     
-    charDict = {'a':26,'b':11,'c':16,'d':19,'e':27,'f':6,'g':8,'h':10,'i':21,'j':7,'k':2,'l':20,'m':15,'n':23,'ñ':4,'o':25,'p':14,'q':13,'r':22,'s':24,'t':17,'u':18,'v':9,'w':1,'x':3,'y':12,'z':5}
+    charDict = {"a":26,"b":11,"c":16,"d":19,"e":27,"f":6,"g":8,"h":10,"i":21,"j":7,"k":2,"l":20,"m":15,"n":23,"ñ":4,"o":25,'p':14,'q':13,'r':22,'s':24,'t':17,'u':18,'v':9,'w':1,'x':3,'y':12,'z':5}
     
     functionDict ={'May':5, 'Ent':8, 'Sup':7, 'Bsp':6, 'Tab':5, 'Esc':4, 'Ins':3, 'Ctl':2, 'Alt':1}
     
@@ -153,14 +153,13 @@ class QKeyboardPyranha(QWidget):
             self.currentKey.clicked.emit(True)
         else:
             if (self.activeClick):
-                print ("Segundo Click")
+                #print ("Segundo Click")
                 self.activeClick = False
-                print(self.currentKey)
                 self.currentKey.clicked.emit(True)
                 self.timer.timeout.disconnect(self.tick2)
                 self.timer.timeout.connect(self.tick)    
             else:
-                print ("Primer Click")
+                #print ("Primer Click")
                 self.activeClick = True
                 self.timer.timeout.disconnect(self.tick)
                 self.timer.timeout.connect(self.tick2)
@@ -268,12 +267,15 @@ class QKeyboardPyranha(QWidget):
     def refreshPredict(self, s):
         s = QString(s)
         print (s.length())
-        
         self.buffer.append(s)
         self.listPredict = self.predict.prediction (self.buffer)
-        self.keyboardUI.predectiveLineEdit_1.setText(self.listPredict[0]) 
-        self.keyboardUI.predectiveLineEdit_2.setText(self.listPredict[1])
-        self.keyboardUI.predectiveLineEdit_3.setText(self.listPredict[2])
+        print(self.listPredict)
+        if(len(self.listPredict)>= 1):
+            self.keyboardUI.predectiveLineEdit_1.setText(self.listPredict[0])
+        if(len(self.listPredict)>= 2): 
+            self.keyboardUI.predectiveLineEdit_2.setText(self.listPredict[1])
+        if(len(self.listPredict)== 3):
+            self.keyboardUI.predectiveLineEdit_3.setText(self.listPredict[2])
 
 #======================================================================================================#
 #====================================MOUSE MODE========================================================#
@@ -366,26 +368,39 @@ class QKeyboardPyranha(QWidget):
                     
     def configCharKeys(self):
         charList = sorted(self.charDict.items(), key=itemgetter(1),reverse=True)
-        print (charList)
         for key,char in zip(self.charButtonArray, charList):
             key.char =char[0]
             key.setText(_translate("Form", char[0], None)) 
             key.clicked.connect(self.charButtonClicked)
             
-        self.predectiveLineEditArray[0].clicked.connect(self.charButtonClicked)
-        self.predectiveLineEditArray[1].clicked.connect(self.charButtonClicked)
-        self.predectiveLineEditArray[2].clicked.connect(self.charButtonClicked)
-    
+        
     def charButtonClicked(self):
         print("Char Clicked")
+        
         if self.uppercase:
             key =  self.sender().text().toUpper()
         else:
             key =  self.sender().text()
         self.refreshPredict(key)
-        print(self.browser.focusWidget().text())
+        
+        if len(key) == 1:
+            print("ACTUALIZANDO TECLADO CHAR")
+            val = self.charDict.get(str(key))
+            print("Letra "+ key + " y su peso es: " + str(self.charDict.get(str(key))))
+            val+=1
+            self.charDict[str(key)]=val
+            #print("Peso de la letra "+ key + ": " + str(self.charDict.get(str(key))))
+            charList = sorted(self.charDict.items(), key=itemgetter(1),reverse=True)
+            for k,c in zip(self.charButtonArray, charList):
+                k.char =c[0]
+                k.setText(_translate("Form", c[0], None)) 
+            
         for c in key:
             QTest.keyClick(self.browser.focusWidget(), c)
+        
+        
+        
+        
     
 #======================================================================================================#
 #===================================FUNCTION MODE======================================================#
@@ -399,6 +414,9 @@ class QKeyboardPyranha(QWidget):
             key.setText(_translate("Form", fun[0], None)) 
             key.clicked.connect(self.functionButtonClicked)
     
+        self.predectiveLineEditArray[0].clicked.connect(self.charButtonClicked)
+        self.predectiveLineEditArray[1].clicked.connect(self.charButtonClicked)
+        self.predectiveLineEditArray[2].clicked.connect(self.charButtonClicked)
     def functionButtonClicked(self):
         if self.sender().function == "May":
             print("Funcion May presionada")
