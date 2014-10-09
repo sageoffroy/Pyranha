@@ -486,15 +486,26 @@ class QKeyboardPyranha(QWidget):
             print "go"
         if(self.sender().web_function=="home"):
             self.browser.loadURL(self.browser.web, self.browser.default_url)
-        if(self.sender().web_function=="new_tab"):
+        elif(self.sender().web_function=="new_tab"):
             self.browser.createTab(self.browser.default_url)
-        if(self.sender().web_function=="stop"):
+        elif(self.sender().web_function=="stop"):
             self.browser.stop()
-        if(self.sender().web_function=="refresh"):
+        elif(self.sender().web_function=="refresh"):
             self.browser.reload()
-        #if(self.sender().web_function==""):
-        #if(self.sender().web_function==""):
-    
+        elif(self.sender().web_function=="zoom_out"):
+            self.browser.zoomIn()
+        elif(self.sender().web_function=="zoom_in"):
+            self.browser.zoomOut()
+        elif(self.sender().web_function=="config"):
+            None
+        elif(self.sender().web_function=="next"):
+            self.browser.goNext()
+        elif(self.sender().web_function=="back"):
+            self.browser.goBack()
+        else:
+            for c in self.sender().web_function:
+                QTest.keyClick(self.browser.focusWidget(), c)
+            
 #======================================================================================================#
 #=====================================MOVE MODE========================================================#
 #======================================================================================================#

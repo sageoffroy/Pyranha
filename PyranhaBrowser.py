@@ -44,19 +44,11 @@ class QPyranhaWebView(QWebView):
 
     def __init__(self):
         QWebView.__init__(self)
-        #self.settings().setAttribute(QWebSettings.PluginsEnabled, True)
-        #Form.setStyleSheet(_fromUtf8("color:#3ea700")) VERDE
-        #self.modeButtonNum.setStyleSheet(_fromUtf8("color:#ff0000")) ROJO
-        #self.modeButtonMedia.setStyleSheet(_fromUtf8("color:#fd750f")) NARANJA
-        #self.modeButtonF.setStyleSheet(_fromUtf8("color:#ff0000")) ROJO
-        #self.modeButtonWeb.setStyleSheet(_fromUtf8("color:#2496b6")) TURQUESA
-
+        
 class MyLineEdit(QLineEdit):
     def __init__(self, *args):
         QLineEdit.__init__(self, *args)
         
-        
-    
 class PyranhaBrowser(QMainWindow):
     COMMAND = ['inicio','pesta','detener','recarga','video','musica','deporte']
     QUICK = {}
@@ -269,30 +261,29 @@ class PyranhaBrowser(QMainWindow):
             self.tabWidget.setTabText(tab,self.tabWidget.widget(tab).title())"""
 
 
-    """ Aca se deberia mostrar el teclado """
+
     
     def commandHandler(self,opc,extra):
-        
         if opc == 1:
-	    if extra == '':
-	        self.createTab(self.default_url)
-	    else:
-	        self.createTab(extra)
-	elif opc == 2:
-	    self.loadHome()
-	elif opc == 3:
-	    self.stop()
-	elif opc == 4:
-	    self.reload()
-	elif opc == 5:
-	    print(self.QUICK.get('Video'))
-	    self.createTab(self.QUICK.get('Video'))
-	elif opc == 6:
-	    self.createTab(self.QUICK.get('Music'))
-	elif opc == 7:
-	    self.createTab(self.QUICK.get('Sport'))
-	else:
-	    print "No hay comando reconocido"
+    	    if extra == '':
+    	        self.createTab(self.default_url)
+    	    else:
+    	        self.createTab(extra)
+    	elif opc == 2:
+    	    self.loadHome()
+    	elif opc == 3:
+    	    self.stop()
+    	elif opc == 4:
+    	    self.reload()
+    	elif opc == 5:
+    	    print(self.QUICK.get('Video'))
+    	    self.createTab(self.QUICK.get('Video'))
+    	elif opc == 6:
+    	    self.createTab(self.QUICK.get('Music'))
+    	elif opc == 7:
+    	    self.createTab(self.QUICK.get('Sport'))
+    	else:
+    	    print "No hay comando reconocido"
 
     #----- NavBar Function -----#
 
@@ -328,6 +319,12 @@ class PyranhaBrowser(QMainWindow):
         url = str(url)
         urlBox.setText(url)
         self.focusURLBox(urlBox)
+        
+    def zoomOut(self):
+        self.web.setZoomFactor(self.web.zoomFactor()+.2)
+    
+    def zoomIn(self):
+        self.web.setZoomFactor(self.web.zoomFactor()-.2)
 
     def stopLoad(self):
         self.web.stop()
