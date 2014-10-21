@@ -984,7 +984,7 @@ class Ui_Form(object):
         self.numButton_3_4.setStyleSheet(_fromUtf8("color:#ff0000"))
         self.numButton_3_4.setObjectName(_fromUtf8("numButton_3_4"))
         #number 3_5
-        self.numButton_back = QNumberButton(Form)
+        self.numButton_back = QBackButton(Form)
         self.numButton_back.setGeometry(QtCore.QRect(740, 210, 35, 35))
         self.numButton_back.setMinimumSize(QtCore.QSize(35, 35))
         self.numButton_back.setMaximumSize(QtCore.QSize(35, 35))
