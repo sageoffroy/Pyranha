@@ -1,22 +1,24 @@
 import sqlite3
 
 
-class sqliteHandler:
+class PyranhaSqliteHandler:
     
     def __init__(self):
+        print("Pyranha Sqlite Handler: iniciando base de datos")
         self.db = "db/pyranha_db"
     #----------------------------------------------------------------------
     #---CONEXION-----------------------------------------------------------
     #----------------------------------------------------------------------
-    def connection(self):
-        """Metodo que establece la conexion con la base de datos SQLITE """
+    """Metodo que establece la conexion con la base de datos SQLITE """
+    def open_connection(self):
         print "Iniciando conexion"
+        print("Pyranha Sqlite Handler - connection: conectando a la base de datos")
         self.con = sqlite3.connect(self.db)    
         self.cursor = self.con.cursor()
-        print "Base de datos abierta correctamente..."
+        print("Pyranha Sqlite Handler - connection: base de datos abierta correctamente")
       
+    """Metodo para cerrar la conexion de la base de datos"""
     def close_connection(self):
-        """Metodo para cerrar la conexion de la base de datos"""
         self.con.close()
     #----------------------------------------------------------------------
     
@@ -87,4 +89,4 @@ class sqliteHandler:
     def start(self):
         """Metodo que inicializa y establece la conexion con la base de datos """
         print "Iniciando handler de base de datos Sqlite"
-        self.connection()
+        self.open_connection()

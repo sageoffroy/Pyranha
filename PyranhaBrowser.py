@@ -39,26 +39,20 @@ def getFuncionesJs():
     f.close()
     return js
 
-
-class QPyranhaWebView(QWebView):
-
-    def __init__(self):
-        QWebView.__init__(self)
-        
-class MyLineEdit(QLineEdit):
-    def __init__(self, *args):
-        QLineEdit.__init__(self, *args)
-        
 class PyranhaBrowser(QMainWindow):
     COMMAND = ['inicio','pesta','detener','recarga','video','musica','deporte']
     QUICK = {}
+    WIDTH = 1024
+    HEIGHT = 800
     
     def __init__(self):
         QMainWindow.__init__(self)
-        self.resize(1024, 800)
+        print("Pyranha Browser: Iniciando Navegador (" + str(self.WIDTH) + " - " + str(self.HEIGHT) + " )")
+        self.resize(self.WIDTH, self.HEIGHT)
         self.setWindowIcon(QIcon('img/logo5.png'))
         self.setWindowTitle('Pyranha Browser')
         self.default_url="http://www.google.com.ar"
+        print("Pyranha Browser: Default URL " + self.default_url)
         self.initGui()
         self.voice = Vox()
         self.handDetector = Hand()
@@ -72,25 +66,26 @@ class PyranhaBrowser(QMainWindow):
         
     
     def initQuick(self):
+        """ Aparantemente favoritos"""
         self.sql.start()
         listQuick = self.sql.get_quick()
         print(listQuick)
         for l in listQuick:
-	    self.QUICK.update({str(l[0]):str(l[1])})
+           self.QUICK.update({str(l[0]):str(l[1])})
         print(self.QUICK)
         self.sql.close_connection()
 
     def initGui(self):
+        print("Pyranha Browser - initGui: Iniciando interfaz")
         self.centralwidget = QWidget(self)
         self.mainLayout = QVBoxLayout(self.centralwidget)
         self.mainLayout.setMargin(0)
         self.mainLayout.setSpacing(0)
         self.createTabBar()
-        
+        print("Pyranha Browser - initGui: creando teclado")
         self.keyboard = QKeyboardPyranha(self)
         self.mainLayout.addWidget(self.keyboard)
         self.centerWidget(self.mainLayout, self.keyboard)
-       
         self.setCss()
         self.setCentralWidget(self.centralwidget)
         
@@ -101,7 +96,10 @@ class PyranhaBrowser(QMainWindow):
             if type(event) == QKeyEvent and event.key() == Qt.Key_AltGr: 
                 self.keyboard.click()
             else:
-                QLineEdit.keyPressEvent(self.focusWidget(), event)
+                try:
+                    QLineEdit.keyPressEvent(self.focusWidget(), event)
+                except TypeError:
+                    print("Ingresando caracter en widget no compatible")
     
     def hideKeyboard(self):
         self.keyboard.hide()
@@ -121,6 +119,7 @@ class PyranhaBrowser(QMainWindow):
         #self.createTab("http://www.chubut.edu.ar")
 
     def createTabBar(self):
+        print("Pyranha Browser - createTabBar: Creando barra de pestanias")
         self.tabBarWidget = QTabWidget(self)
         self.tabBarWidget.setMovable(True)
         self.tabBarWidget.setTabsClosable(True)
@@ -150,7 +149,7 @@ class PyranhaBrowser(QMainWindow):
         stopButton.setIcon(QIcon('img/stopLoad5.png'))
         buttonGO = QToolButton()
         buttonGO.setIcon(QIcon('img/goGo5.png'))
-        self.urlBox = MyLineEdit()
+        self.urlBox = QLineEdit()
 
         navBarLayout = QHBoxLayout()
         navBarLayout.setMargin(0)
@@ -165,17 +164,8 @@ class PyranhaBrowser(QMainWindow):
         self.tabLayout.addWidget(navBar)
 
         #-- Creando la vista Web
-        self.web = QPyranhaWebView()
+        self.web = QWebView()
         self.tabLayout.addWidget(self.web)
-        
-        #-- Cargando keyboard
-        #self.keyboardLayout=QHBoxLayout()    
-        #self.keyboardLayout.setMargin(0)
-        #self.keyboardLayout.setSpacing(0)
-        ##tabLayout.addLayout(self.keyboardLayout)
-        #print (self.width())
-        #print (self.height())
-        
         
         #-- Signals
         self.urlBox.returnPressed.connect(lambda: self.loadURL(self.web, self.urlBox.displayText()))

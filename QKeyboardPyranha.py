@@ -10,7 +10,7 @@ from QMoveButton import QMoveButton
 from QNumberButton import QNumberButton
 from pymouse import PyMouse
 
-from predict import *
+from PyranhaPredict import *
 
 #En los caso que se use python 3 QString no existe
 try:  
@@ -84,20 +84,18 @@ class QKeyboardPyranha(QWidget):
     
     def __init__(self, browser):
         QWidget.__init__(self)
-        print("se creo keyboard")
+        print("QKeyboardPyrana: iniciando teclado")
         self.setMinimumSize(860,250)
-        
         #Referencia al navegador para obtener el foco
         self.browser = browser
-        
         #Cargando interfaz y configurando botones
         self.keyboardUI = Ui_Form()
         self.keyboardUI.setupUi(self)
         self.setArray()
         self.setButtonFocusPolicy()
-        
+        print("QKeyboardPyrana: iniciando texto predictivo")
         #Instanciamos el predict
-        self.predict = predict()
+        self.predict = PyranhaPredict()
         self.buffer = QString()
         self.refreshPredict('')
         
@@ -151,7 +149,7 @@ class QKeyboardPyranha(QWidget):
     def click(self):
         #print(self.mode)
         if(self.mode == "off"):
-            print("tratando de mostrar")
+            print("Teclado On")
             self.browser.showKeyboard()
             self.mode = "char1"
         elif (self.currentKey == self.keyboardUI.mouseButton_c):
@@ -430,10 +428,8 @@ class QKeyboardPyranha(QWidget):
         numList = sorted(self.numDict.items(), key=itemgetter(1),reverse=True)
         operList = sorted(self.operNumDict.items(), key=itemgetter(1),reverse=True)
         numList = numList + operList
-        #operAndNumDict = self.numDict
-        #operAndNumDict.update(self.operNumDict)
+        numList.append(("b",0))
         print (numList)
-        #print (operAndNumDict)
         for key,num in zip(self.numButtonArray, numList):
             if (key.accessibleName()=="back"):
                 key.clicked.connect(self.backButtonClicked)
@@ -446,8 +442,6 @@ class QKeyboardPyranha(QWidget):
     def numButtonClicked(self):
         key =  self.sender().text()
         QTest.keyClick(self.browser.focusWidget(), key)
-        
-
         if self.numDict.has_key(str(key)):
             print("es un numero")
             val = self.numDict.get(str(key))
@@ -643,6 +637,7 @@ class QKeyboardPyranha(QWidget):
             opc = self.browser.handDetector.start()        
             self.browser.commandHandler(opc,'')
         elif self.sender().mode == "off":
+            print ("Teclado Off")
             self.mode = "off"
             self.browser.hideKeyboard()
         else:

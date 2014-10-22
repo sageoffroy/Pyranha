@@ -1,7 +1,8 @@
-from sqliteHandler import *
+from PyranhaSqliteHandler import *
 
-class predict:
+class PyranhaPredict:
     def __init__(self):
+        print("Pyranha Predict: creando el controlado de sqlite")
         self.sql = sqliteHandler()
 
     def dictToList(self,dic,subword):
