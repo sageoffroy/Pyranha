@@ -3,7 +3,7 @@ from PyranhaSqliteHandler import *
 class PyranhaPredict:
     def __init__(self):
         print("Pyranha Predict: creando el controlado de sqlite")
-        self.sql = sqliteHandler()
+        self.sql = PyranhaSqliteHandler()
 
     def dictToList(self,dic,subword):
         """Metodo que retorna en una lista los valores """
