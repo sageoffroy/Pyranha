@@ -13,7 +13,7 @@ from QKeyboardPyranha import QKeyboardPyranha
 
 from vox import Vox
 from hand import Hand
-from sqliteHandler import *
+from PyranhaSqliteHandler import *
 
 JQUERY_URL = 'http://code.jquery.com/jquery-1.11.0.min.js'
 JQUERY_FILE = JQUERY_URL.split('/')[-1]
@@ -61,7 +61,7 @@ class PyranhaBrowser(QMainWindow):
         self.funcionesJs=getFuncionesJs()
         self.resizeEvent = self.onResize
         self.activeKey = False;
-        self.sql = sqliteHandler()
+        self.sql = PyranhaSqliteHandler()
         self.initQuick()
         
     
