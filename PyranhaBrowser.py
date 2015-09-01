@@ -21,25 +21,26 @@ JQUERY_PATH = os.path.join(os.path.dirname(__file__), JQUERY_FILE)
 
 
 def getJquery(jquery_url=JQUERY_URL, jquery_path=JQUERY_PATH):
-        if not os.path.exists(jquery_path):
-            jquery = urlopen(jquery_url).read()
-            f = open(jquery_path, 'w')
-            f.write(jquery)
-            f.close()
-        else:
-            f = open(jquery_path)
-            jquery = f.read()
-            f.close()
-        return jquery
+  if not os.path.exists(jquery_path):
+    jquery = urlopen(jquery_url).read()
+    f = open(jquery_path, 'w')
+    f.write(jquery)
+    f.close()
+  else:
+    f = open(jquery_path)
+    jquery = f.read()
+    f.close()
+  return jquery
 
 def getFuncionesJs():
-    js_path=os.path.join(os.path.dirname(__file__), 'funciones.js')
-    f = open(js_path)
-    js = f.read()
-    f.close()
-    return js
+  js_path=os.path.join(os.path.dirname(__file__), 'funciones.js')
+  f = open(js_path)
+  js = f.read()
+  f.close()
+  return js
 
 class PyranhaBrowser(QMainWindow):
+<<<<<<< HEAD
     COMMAND = ['inicio','pesta','detener','recarga','video','musica','deporte','noticias']
     QUICK = {}
     WIDTH = 1024
@@ -103,158 +104,154 @@ class PyranhaBrowser(QMainWindow):
                     QLineEdit.keyPressEvent(self.focusWidget(), event)
                 except TypeError:
                     print("Ingresando caracter en widget no compatible")
+  
+  def hideKeyboard(self):
+      self.keyboard.hide()
+      
+  def showKeyboard(self):
+      self.keyboard.show()
+      
+  def onResize(self, event):
+      self.centerWidget(self.tabLayout, self.keyboard)
+
+  def loadHome(self):
+      self.createTab(self.default_url)
+      #self.createTab("https://www.google.com")
+      #self.createTab("https://www.facebook.com")
+      #self.createTab("http://www.ole.com.ar")
+      #self.createTab("http://www.tekoavirtual.chubut.edu.ar")
+      #self.createTab("http://www.chubut.edu.ar")
+
+  def createTabBar(self):
+    print("Pyranha Browser - createTabBar: Creando barra de pestanias")
+    self.tabBarWidget = QTabWidget(self)
+    self.tabBarWidget.setMovable(True)
+    self.tabBarWidget.setTabsClosable(True)
+    self.tabBarWidget.currentChanged.connect(self.tabChanged)
+    self.tabBarWidget.tabCloseRequested.connect(self.closeTab)
+    self.addtabButton = QToolButton()
+    self.addtabButton.setIcon(QIcon('img/addTab.png'))
+    self.addtabButton.clicked.connect(lambda: self.createTab(self.default_url))
+    self.tabBarWidget.setCornerWidget(self.addtabButton,Qt.TopRightCorner)
+    self.mainLayout.addWidget(self.tabBarWidget)
+
+  def createTab(self, url):
+    self.tabLayout = QVBoxLayout()
+    self.tabLayout.setMargin(0)
+    self.tabLayout.setSpacing(0)
+    tab = QWidget()
+    tab.setLayout(self.tabLayout)
+
+    #-- Creando NavBar
+    navBar = QWidget()
+    navBar.setMaximumHeight(27)
+    backButton = QToolButton()
+    backButton.setIcon(QIcon('img/goBack5.png'))
+    nextButton = QToolButton()
+    nextButton.setIcon(QIcon('img/goNext5.png'))
+    stopButton = QToolButton()
+    stopButton.setIcon(QIcon('img/stopLoad5.png'))
+    buttonGO = QToolButton()
+    buttonGO.setIcon(QIcon('img/goGo5.png'))
+    self.urlBox = QLineEdit()
+
+    navBarLayout = QHBoxLayout()
+    navBarLayout.setMargin(0)
+    navBarLayout.setSpacing(0)
+    navBarLayout.addWidget(backButton)
+    navBarLayout.addWidget(nextButton)
+    navBarLayout.addWidget(stopButton)
+    navBarLayout.addWidget(self.urlBox)
+    navBarLayout.addWidget(buttonGO)
+    navBar.setLayout(navBarLayout)
     
-    def hideKeyboard(self):
-        self.keyboard.hide()
-        
-    def showKeyboard(self):
-        self.keyboard.show()
-        
-    def onResize(self, event):
-        self.centerWidget(self.tabLayout, self.keyboard)
+    self.tabLayout.addWidget(navBar)
 
-    def loadHome(self):
-        #self.createTab(self.default_url)
-        self.createTab("https://www.google.com")
-        self.createTab("https://www.facebook.com")
-        #self.createTab("http://www.ole.com.ar")
-        #self.createTab("http://www.tekoavirtual.chubut.edu.ar")
-        #self.createTab("http://www.chubut.edu.ar")
-
-    def createTabBar(self):
-        print("Pyranha Browser - createTabBar: Creando barra de pestanias")
-        self.tabBarWidget = QTabWidget(self)
-        self.tabBarWidget.setMovable(True)
-        self.tabBarWidget.setTabsClosable(True)
-        self.tabBarWidget.currentChanged.connect(self.tabChanged)
-        self.tabBarWidget.tabCloseRequested.connect(self.closeTab)
-        self.addtabButton = QToolButton()
-        self.addtabButton.setIcon(QIcon('img/addTab.png'))
-        self.addtabButton.clicked.connect(lambda: self.createTab(self.default_url))
-        self.tabBarWidget.setCornerWidget(self.addtabButton,Qt.TopRightCorner)
-        self.mainLayout.addWidget(self.tabBarWidget)
-
-    def createTab(self, url):
-        self.tabLayout = QVBoxLayout()
-        self.tabLayout.setMargin(0)
-        self.tabLayout.setSpacing(0)
-        tab = QWidget()
-        tab.setLayout(self.tabLayout)
-
-        #-- Creando NavBar
-        navBar = QWidget()
-        navBar.setMaximumHeight(27)
-        backButton = QToolButton()
-        backButton.setIcon(QIcon('img/goBack5.png'))
-        nextButton = QToolButton()
-        nextButton.setIcon(QIcon('img/goNext5.png'))
-        stopButton = QToolButton()
-        stopButton.setIcon(QIcon('img/stopLoad5.png'))
-        buttonGO = QToolButton()
-        buttonGO.setIcon(QIcon('img/goGo5.png'))
-        self.urlBox = QLineEdit()
-
-        navBarLayout = QHBoxLayout()
-        navBarLayout.setMargin(0)
-        navBarLayout.setSpacing(0)
-        navBarLayout.addWidget(backButton)
-        navBarLayout.addWidget(nextButton)
-        navBarLayout.addWidget(stopButton)
-        navBarLayout.addWidget(self.urlBox)
-        navBarLayout.addWidget(buttonGO)
-        navBar.setLayout(navBarLayout)
-        
-        self.tabLayout.addWidget(navBar)
-
-        #-- Creando la vista Web
-        self.web = QWebView()
-        self.tabLayout.addWidget(self.web)
-        
-        #-- Signals
-        self.urlBox.returnPressed.connect(lambda: self.loadURL(self.web, self.urlBox.displayText()))
-        buttonGO.clicked.connect(lambda: self.loadURL(self.web, self.urlBox.displayText()))
-        backButton.clicked.connect(lambda: self.goBack(self.web, self.urlBox))
-        nextButton.clicked.connect(lambda: self.goBack(self.web, self.urlBox))
-        #stopButton.clicked.connect(self.stopLoad)
-        self.web.loadFinished.connect(lambda:self.loadFinished(self.web,self.urlBox))
-        self.web.linkClicked.connect(self.handleLinkClicked)
-
-        #web.urlChanged.connect(self.updateUrlBox)
-        #web.connect(web, QtCore.SIGNAL('loadFinished(bool)'), self.loadFinished)
-        self.tabBarWidget.setCurrentIndex(self.tabBarWidget.addTab(tab, 'Cargando...'))
-        self.web.load(QUrl(str(url)))
-
-        #Set Focus URL Box
-        self.urlBox.setFocus()
-        self.urlBox.selectAll()
-
-    def centerWidget(self, layout, widget):
-        layout.setAlignment(widget, Qt.AlignCenter)
+    #-- Creando la vista Web
+    self.web = QWebView()
+    self.tabLayout.addWidget(self.web)
     
-    def closeTab(self, num):
-        self.tabBarWidget.removeTab(num)
+    #-- Signals
+    self.urlBox.returnPressed.connect(lambda: self.loadURL(self.web, self.urlBox.displayText()))
+    buttonGO.clicked.connect(lambda: self.loadURL(self.web, self.urlBox.displayText()))
+    backButton.clicked.connect(lambda: self.goBack(self.web, self.urlBox))
+    nextButton.clicked.connect(lambda: self.goBack(self.web, self.urlBox))
+    #stopButton.clicked.connect(self.stopLoad)
+    self.web.loadFinished.connect(lambda:self.loadFinished(self.web,self.urlBox))
+    self.web.linkClicked.connect(self.handleLinkClicked)
 
-    def tabChanged(self, num):
+    #web.urlChanged.connect(self.updateUrlBox)
+    #web.connect(web, QtCore.SIGNAL('loadFinished(bool)'), self.loadFinished)
+    self.tabBarWidget.setCurrentIndex(self.tabBarWidget.addTab(tab, 'Cargando...'))
+    self.web.load(QUrl(str(url)))
 
-        for child in self.tabBarWidget.widget(num).findChildren(QWebView):
-            self.setWindowTitle("Pyranha  " + child.title())
-            #for child in self.tabBarWidget.widget(num).findChildren(QLineEdit):
-            #self.focusURLBox(child)
-    
-    def loadFinished(self, web, urlBox):
-        print("Load Finished")
-        urlBox.setText(web.url().scheme()+"://" + web.url().host())
+    #Set Focus URL Box
+    self.urlBox.setFocus()
+    self.urlBox.selectAll()
 
+  def centerWidget(self, layout, widget):
+    layout.setAlignment(widget, Qt.AlignCenter)
+  
+  def closeTab(self, num):
+    self.tabBarWidget.removeTab(num)
 
-        espacios = ""
-
-        for child in self.tabBarWidget.currentWidget().findChildren(QWebView):
-            if len(child.title()) > 20:
-                str = child.title()[0:17] + "..."
-            elif len(child.title()) <= 20:
-                for x in range(1, 21 - len(child.title())):
-                    espacios = espacios +" "
-                str = child.title()+espacios
-            self.setWindowTitle("Pyranha  " + child.title())
-            self.tabBarWidget.setTabText(self.tabBarWidget.currentIndex(),str)
-
-        #doc = web.page().mainFrame().documentElement()
-
-        web.page().mainFrame().evaluateJavaScript(self.jquery)
-        web.page().mainFrame().evaluateJavaScript(self.funcionesJs)
-
-        """inputCollection = doc.findAll("input")
-
-        inputList = inputCollection.toList()
-        t = []
-        for we in inputList:
-            print("---> "+we.toOuterXml())
-            #print("ACA: ---> "+t.toOuterXml())
-        for we in inputList:
-            if we.toOuterXml().contains("submit", 1):
-                print("Sacando Boton")
-            if we.toOuterXml().contains("hidden", 1):
-                print("Sacando Input Oculto")
-            if we.toOuterXml().contains("radio", 1):
-                print("Sacando Radio")
-            if we.toOuterXml().contains("checkbox", 1):
-                print("Sacando Checkbox")
-            else:
-                t.append(we)
-        for h in t:
-            print("Ejecutando JS A: "+h.toOuterXml())
-
-            if h.hasFocus():
-                print("FOCO---> "+h.toOuterXml())"""
+  def tabChanged(self, num):
+    for child in self.tabBarWidget.widget(num).findChildren(QWebView):
+      self.setWindowTitle("Pyranha  " + child.title())
+      #for child in self.tabBarWidget.widget(num).findChildren(QLineEdit):
+      #self.focusURLBox(child)
+  
+  def loadFinished(self, web, urlBox):
+    print("Load Finished")
+    if web.url().host() != "":
+      urlBox.setText(web.url().scheme()+"://" + web.url().host())
+    else:
+      urlBox.setText("Inicio")
 
 
-    """def updateTitle(self):
-        for tab in range(self.tabWidget.count()):
-                self.setWindowTitle(self.tabWidget.widget(tab).title())
-            self.tabWidget.setTabText(tab,self.tabWidget.widget(tab).title())"""
+    espacios = ""
+
+    for child in self.tabBarWidget.currentWidget().findChildren(QWebView):
+        if len(child.title()) > 20:
+            str = child.title()[0:17] + "..."
+        elif len(child.title()) <= 20:
+            for x in range(1, 21 - len(child.title())):
+                espacios = espacios +" "
+            str = child.title()+espacios
+        self.setWindowTitle("Pyranha  " + child.title())
+        self.tabBarWidget.setTabText(self.tabBarWidget.currentIndex(),str)
+
+    #doc = web.page().mainFrame().documentElement()
+
+    web.page().mainFrame().evaluateJavaScript(self.jquery)
+    web.page().mainFrame().evaluateJavaScript(self.funcionesJs)
+
+    """inputCollection = doc.findAll("input")
+
+    inputList = inputCollection.toList()
+    t = []
+    for we in inputList:
+        print("---> "+we.toOuterXml())
+        #print("ACA: ---> "+t.toOuterXml())
+    for we in inputList:
+        if we.toOuterXml().contains("submit", 1):
+            print("Sacando Boton")
+        if we.toOuterXml().contains("hidden", 1):
+            print("Sacando Input Oculto")
+        if we.toOuterXml().contains("radio", 1):
+            print("Sacando Radio")
+        if we.toOuterXml().contains("checkbox", 1):
+            print("Sacando Checkbox")
+        else:
+            t.append(we)
+    for h in t:
+        print("Ejecutando JS A: "+h.toOuterXml())
+
+        if h.hasFocus():
+            print("FOCO---> "+h.toOuterXml())"""
 
 
-
+<<<<<<< HEAD
     
     def commandHandler(self,opc,extra):
         """Este metodo tiene por fin controlar los comandos, cada entero representa una accion que se realizara
@@ -499,7 +496,6 @@ class PyranhaBrowser(QMainWindow):
 
         self.setAutoFillBackground(True)
         self.setStyleSheet(css)
-
 
 
 # ///////////////////////////////////////////////////////////////////////////////////////////////#
