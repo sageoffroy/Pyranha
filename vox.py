@@ -33,6 +33,7 @@ class Vox:
         stream.stop_stream()
         print "END"
         stream.close()
+        playDing()
         audio.terminate()
         write_frames = open_audio(self.file, 'wb')
         write_frames.setnchannels(self.channel)
@@ -74,31 +75,34 @@ class Vox:
         """
         #print rta
         opc=0
-	for r in rta:
+        for r in rta:
             for c in commands:
+                
                 if c in r:
                     if c == 'pesta':
                         #createTab(self, url)
                         return 1
                     elif c == 'inicio':
-		        #loadHome(self)
-		        return 2
-		    elif c == 'detener':
+                        #loadHome(self)
+                        return 2
+                    elif c == 'detener':
                         #stop(self)
                         return 3
                     elif c == 'recarga':
-		        #reload(self)
-		        return 4
-		    elif c == 'video':
-		        #reload(self)
-		        return 5
-		    elif c == 'musica':
-		        #reload(self)
-		        return 6
-		    elif c == 'deporte':
-		        #reload(self)
-		        return 7
-		      
+                        #reload(self)
+                        return 4
+                    elif c == 'video':
+                        #reload(self)
+                        return 5
+                    elif c == 'musica':
+                        #reload(self)
+                        return 6
+                    elif c == 'deporte':
+                        #reload(self)
+                        return 7
+                    elif c == 'noticias':
+                        #reload(self)
+                        return 8
         return opc
       
     def start(self,commands):

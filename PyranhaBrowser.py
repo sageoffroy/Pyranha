@@ -40,7 +40,7 @@ def getFuncionesJs():
     return js
 
 class PyranhaBrowser(QMainWindow):
-    COMMAND = ['inicio','pesta','detener','recarga','video','musica','deporte']
+    COMMAND = ['inicio','pesta','detener','recarga','video','musica','deporte','noticias']
     QUICK = {}
     WIDTH = 1024
     HEIGHT = 800
@@ -66,7 +66,10 @@ class PyranhaBrowser(QMainWindow):
         
     
     def initQuick(self):
-        """ Aparantemente favoritos"""
+        """ Metodo que toma de la base de datos SQLITE los sitios favoritos. Estos estan clasificados por categorias
+        es entonces que cargandose en QUICK el usuario podra utilizar los comandos por VOZ llamando a las categorias
+        (deporte, musica, video, noticias, etc)
+        """
         self.sql.start()
         listQuick = self.sql.get_quick()
         print(listQuick)
@@ -254,26 +257,30 @@ class PyranhaBrowser(QMainWindow):
 
     
     def commandHandler(self,opc,extra):
+        """Este metodo tiene por fin controlar los comandos, cada entero representa una accion que se realizara
+        cuando se envie una senial desde el manejador de voces."""
         if opc == 1:
-    	    if extra == '':
-    	        self.createTab(self.default_url)
-    	    else:
-    	        self.createTab(extra)
-    	elif opc == 2:
-    	    self.loadHome()
-    	elif opc == 3:
-    	    self.stop()
-    	elif opc == 4:
-    	    self.reload()
-    	elif opc == 5:
-    	    print(self.QUICK.get('Video'))
-    	    self.createTab(self.QUICK.get('Video'))
-    	elif opc == 6:
-    	    self.createTab(self.QUICK.get('Music'))
-    	elif opc == 7:
-    	    self.createTab(self.QUICK.get('Sport'))
-    	else:
-    	    print "No hay comando reconocido"
+            if extra == '':
+                self.createTab(self.default_url)
+            else:
+                self.createTab(extra)
+        elif opc == 2:
+            self.loadHome()
+        elif opc == 3:
+            self.web.stop()
+        elif opc == 4:
+            self.web.reload()
+        elif opc == 5:
+            print(self.QUICK.get('Video'))
+            self.createTab(self.QUICK.get('Video'))
+        elif opc == 6:
+            self.createTab(self.QUICK.get('Music'))
+        elif opc == 7:
+            self.createTab(self.QUICK.get('Sport'))
+        elif opc == 8:
+            self.createTab(self.QUICK.get('News'))
+        else:
+            print "No hay comando reconocido"
 
     #----- NavBar Function -----#
 
