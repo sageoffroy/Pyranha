@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Preferencias</title>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="assets/css/preferences.css">
+  </head>
+
+
+  <body>
+    <nav class="navbar navbar-default sidebar" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-sidebar-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>      
+        </div>
+        <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#browser">Navegador<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-globe"></span></a></li>
+            <li ><a href="#keyboard">Teclado<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-calendar"></span></a></li>
+            <li ><a href="#voice">Comandos de Voz<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-bullhorn"></span></a></li>        
+            <li ><a href="#video">Comandos de Video<span style="font-size:16px;" class="pull-right hidden-xs showopacity glyphicon glyphicon-facetime-video"></span></a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container">
+      <center><h1>Pyranha Preferencias</h1></center>
+      
+      <section class="section" id="browser">
+        <h2>Configuración del navegador</h2>
+        
+
+        <div class="option">
+          <div class="">
+            <h4 class="tittle-option"> Pagina de inicio</h4>
+            <div class="input-text">
+              <input type="text" id="home-page" placeholder="http://www.google.com.ar" style="margin: 5px 0px 0px 0px;">
+
+            </div>
+              
+          </div>
+        </div>
+        
+
+        <div class="option">
+          <div class="">
+            <h4 class="tittle-option"> Ancho del navegador </h4>
+            <div class="input-group number-spinner">
+              <span class="input-group-btn data-dwn">
+                <button class="btn btn-default btn-info" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></button>
+              </span>
+              <input type="text" class="form-control text-center" value="1" min="-10" max="40" id="width-browser">
+              <span class="input-group-btn data-up">
+                <button class="btn btn-default btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></button>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="option">
+          <div class="">
+            <h4 class="tittle-option"> Alto del navegador </h4>
+            <div class="input-group number-spinner">
+              <span class="input-group-btn data-dwn">
+                <button class="btn btn-default btn-info" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></button>
+              </span>
+              <input type="text" class="form-control text-center" value="1" min="-10" max="40" id="height-browser">
+              <span class="input-group-btn data-up">
+                <button class="btn btn-default btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>                
+
+      <section class="section" id="keyboard">
+        <h2>Configuración del teclado</h2>
+
+        <div class="option">
+          <div class="">
+            <h4 class="tittle-option"> Velocidad del controlador </h4>
+            <div class="input-group number-spinner">
+              <span class="input-group-btn data-dwn">
+                <button class="btn btn-default btn-info" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></button>
+              </span>
+              <input type="text" class="form-control text-center" value="1" min="-10" max="40">
+              <span class="input-group-btn data-up">
+                <button class="btn btn-default btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></button>
+              </span>
+            </div>
+              
+          </div>
+        </div>
+
+        <div class="option">
+          <div class="">
+            <h4 class="tittle-option"> Teclado Inteligente</h4>
+              <div class="">
+                <input type="checkbox" style="margin:15px 0px 0px 0px;">
+              </div>
+          </div>
+        </div>
+
+        <div class="option">
+          <div class="">
+            <h4 class="tittle-option"> Velocidad del mouse </h4>
+            <div class="input-group number-spinner">
+              <span class="input-group-btn data-dwn">
+                <button class="btn btn-default btn-info" data-dir="dwn"><span class="glyphicon glyphicon-minus"></span></button>
+              </span>
+              <input type="text" class="form-control text-center" value="1" min="-10" max="40">
+              <span class="input-group-btn data-up">
+                <button class="btn btn-default btn-info" data-dir="up"><span class="glyphicon glyphicon-plus"></span></button>
+              </span>
+            </div>
+              
+          </div>
+        </div>
+        
+
+      </section>                    
+
+        <section class="section" id="voice">
+          <h2>Configuración de comandos por micrófono</h2>
+      </section>
+
+      <section class="section" id="video">
+        <h2>Configuración de comandos por video</h2>
+      </section>
+
+    </div>
+
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    <script src="assets/js/preferences.js"></script>
+
+  </body>
+</html>

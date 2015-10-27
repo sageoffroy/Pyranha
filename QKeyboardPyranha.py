@@ -83,9 +83,9 @@ class QKeyboardPyranha(QWidget):
   operNumDict = {'+':1,'-':2,'/':3,'*':4}
 
   #=======Atributos Configurables===========
-  time_controller = 800
-  isSortable = True
-  mouse_speed = 8
+  time_controller = 0
+  is_sortable = False
+  mouse_speed = 0
   #=========================================
   
   def __init__(self, browser):
@@ -94,6 +94,12 @@ class QKeyboardPyranha(QWidget):
     self.setMinimumSize(860,250)
     #Referencia al navegador para obtener el foco
     self.browser = browser
+    #Configurar desde el xml
+    keyboard_cfg = self.browser.keyboard_cfg
+    self.time_controller = int(keyboard_cfg.findtext('time_controller'))
+    self.is_sortable = keyboard_cfg.findtext('is_sortable') in ['true', '1', 't', 'y', 'yes', 'si', 'certainly', 'True']
+    self.mouse_speed = int(keyboard_cfg.findtext('mouse_speed'))
+
     #Cargando interfaz y configurando botones
     self.keyboardUI = Ui_Form()
     self.keyboardUI.setupUi(self)
@@ -400,8 +406,8 @@ class QKeyboardPyranha(QWidget):
       else:
           key =  self.sender().text()
       self.refreshPredict(key)
-      
-      if (len(key) == 1) and (self.isSortable):
+      print(self.is_sortable)
+      if (len(key) == 1) and (self.is_sortable):
           print("ACTUALIZANDO TECLADO CHAR")
           val = self.charDict.get(str(key))
           print("Letra "+ key + " y su peso es: " + str(self.charDict.get(str(key))))

@@ -15,212 +15,227 @@ from vox import Vox
 from hand import Hand
 from PyranhaSqliteHandler import *
 
+from lxml import etree
+
+
 JQUERY_URL = 'http://code.jquery.com/jquery-1.11.0.min.js'
 JQUERY_FILE = JQUERY_URL.split('/')[-1]
 JQUERY_PATH = os.path.join(os.path.dirname(__file__), JQUERY_FILE)
 
 
 def getJquery(jquery_url=JQUERY_URL, jquery_path=JQUERY_PATH):
-  if not os.path.exists(jquery_path):
-    jquery = urlopen(jquery_url).read()
-    f = open(jquery_path, 'w')
-    f.write(jquery)
-    f.close()
-  else:
-    f = open(jquery_path)
-    jquery = f.read()
-    f.close()
-  return jquery
+    if not os.path.exists(jquery_path):
+        jquery = urlopen(jquery_url).read()
+        f = open(jquery_path, 'w')
+        f.write(jquery)
+        f.close()
+    else:
+        f = open(jquery_path)
+        jquery = f.read()
+        f.close()
+    return jquery
 
 def getFuncionesJs():
-  js_path=os.path.join(os.path.dirname(__file__), 'funciones.js')
-  f = open(js_path)
-  js = f.read()
-  f.close()
-  return js
+    js_path=os.path.join(os.path.dirname(__file__), 'funciones.js')
+    f = open(js_path)
+    js = f.read()
+    f.close()
+    return js
 
 class PyranhaBrowser(QMainWindow):
-  COMMAND = ['inicio','pesta','detener','recarga','video','musica','deporte']
-  QUICK = {}
-  WIDTH = 1024
-  HEIGHT = 800
+    COMMAND = ['inicio','pesta','detener','recarga','video','musica','deporte']
+    QUICK = {}
+    width = 0
+    height = 0
   
-  def __init__(self):
-    QMainWindow.__init__(self)
-    print("Pyranha Browser: Iniciando Navegador (" + str(self.WIDTH) + " - " + str(self.HEIGHT) + " )")
-    self.resize(self.WIDTH, self.HEIGHT)
-    self.setWindowIcon(QIcon('img/logo_pyranha.png'))
-    self.setWindowTitle('Pyranha Browser')
-    self.default_url="index/prueba.html"
-    print("Pyranha Browser: Default URL " + self.default_url)
-    self.initGui()
-    self.voice = Vox()
-    self.handDetector = Hand()
-    self.loadHome()
-    self.jquery = getJquery()
-    self.funcionesJs=getFuncionesJs()
-    self.resizeEvent = self.onResize
-    self.activeKey = False;
-    self.sql = PyranhaSqliteHandler()
-    self.initQuick()
+    def __init__(self):
+        QMainWindow.__init__(self)
+        
+        #----------------- Configurando desde el archivo ---------------#
+        config = etree.parse('config.xml')
+        #-- configurando Browser
+        browser_cfg = config.find('browser')
+        self.width = int(browser_cfg.findtext('width'))
+        self.height = int(browser_cfg.findtext('height'))
+        self.resize(self.width, self.height)
+        self.setWindowIcon(QIcon(browser_cfg.findtext('windows_icon')))
+        self.setWindowTitle(browser_cfg.findtext('windows_tittle'))
+        self.default_url=browser_cfg.findtext('home')
+        #-- configurando Teclado
+        self.keyboard_cfg = config.find('keyboard')
+        #----------------------------------------------------------------#
+
+        self.initGui()
+        self.voice = Vox()
+        self.handDetector = Hand()
+        self.loadHome()
+        self.jquery = getJquery()
+        self.funcionesJs=getFuncionesJs()
+        self.resizeEvent = self.onResize
+        self.activeKey = False;
+        self.sql = PyranhaSqliteHandler()
+        self.initQuick()
         
     
-  def initQuick(self):
-      """ Aparantemente favoritos"""
-      self.sql.start()
-      listQuick = self.sql.get_quick()
-      print(listQuick)
-      for l in listQuick:
+    def initQuick(self):
+        """ Aparantemente favoritos"""
+        self.sql.start()
+        listQuick = self.sql.get_quick()
+        print(listQuick)
+        for l in listQuick:
          self.QUICK.update({str(l[0]):str(l[1])})
-      print(self.QUICK)
-      self.sql.close_connection()
+        print(self.QUICK)
+        self.sql.close_connection()
 
-  def initGui(self):
-      print("Pyranha Browser - initGui: Iniciando interfaz")
-      self.centralwidget = QWidget(self)
-      self.mainLayout = QVBoxLayout(self.centralwidget)
-      self.mainLayout.setMargin(0)
-      self.mainLayout.setSpacing(0)
-      self.createTabBar()
-      print("Pyranha Browser - initGui: creando teclado")
-      self.keyboard = QKeyboardPyranha(self)
-      self.mainLayout.addWidget(self.keyboard)
-      self.centerWidget(self.mainLayout, self.keyboard)
-      self.setCss()
-      self.setCentralWidget(self.centralwidget)
+    def initGui(self):
+        print("Pyranha Browser - initGui: Iniciando interfaz")
+        self.centralwidget = QWidget(self)
+        self.mainLayout = QVBoxLayout(self.centralwidget)
+        self.mainLayout.setMargin(0)
+        self.mainLayout.setSpacing(0)
+        self.createTabBar()
+        print("Pyranha Browser - initGui: creando teclado")
+        self.keyboard = QKeyboardPyranha(self)
+        self.mainLayout.addWidget(self.keyboard)
+        self.centerWidget(self.mainLayout, self.keyboard)
+        self.setCss()
+        self.setCentralWidget(self.centralwidget)
       
-  def keyPressEvent(self, event):
-      if(event.isAutoRepeat()):
-          None
-      else:
-          if type(event) == QKeyEvent and event.key() == Qt.Key_AltGr: 
-              self.keyboard.click()
-          else:
-              try:
-                  QLineEdit.keyPressEvent(self.focusWidget(), event)
-              except TypeError:
-                  print("Ingresando caracter en widget no compatible")
+    def keyPressEvent(self, event):
+        if(event.isAutoRepeat()):
+            None
+        else:
+            if type(event) == QKeyEvent and event.key() == Qt.Key_AltGr: 
+                self.keyboard.click()
+            else:
+                try:
+                    QLineEdit.keyPressEvent(self.focusWidget(), event)
+                except TypeError:
+                    print("Ingresando caracter en widget no compatible")
   
-  def hideKeyboard(self):
-      self.keyboard.hide()
+    def hideKeyboard(self):
+        self.keyboard.hide()
       
-  def showKeyboard(self):
-      self.keyboard.show()
+    def showKeyboard(self):
+        self.keyboard.show()
       
-  def onResize(self, event):
-      self.centerWidget(self.tabLayout, self.keyboard)
+    def onResize(self, event):
+        self.centerWidget(self.tabLayout, self.keyboard)
 
-  def loadHome(self):
-      self.createTab(self.default_url)
+    def loadHome(self):
+        self.createTab('preferences.html')
       #self.createTab("https://www.google.com")
       #self.createTab("https://www.facebook.com")
       #self.createTab("http://www.ole.com.ar")
       #self.createTab("http://www.tekoavirtual.chubut.edu.ar")
       #self.createTab("http://www.chubut.edu.ar")
 
-  def createTabBar(self):
-    print("Pyranha Browser - createTabBar: Creando barra de pestanias")
-    self.tabBarWidget = QTabWidget(self)
-    self.tabBarWidget.setMovable(True)
-    self.tabBarWidget.setTabsClosable(True)
-    self.tabBarWidget.currentChanged.connect(self.tabChanged)
-    self.tabBarWidget.tabCloseRequested.connect(self.closeTab)
-    self.addtabButton = QToolButton()
-    self.addtabButton.setIcon(QIcon('img/addTab.png'))
-    self.addtabButton.clicked.connect(lambda: self.createTab(self.default_url))
-    self.tabBarWidget.setCornerWidget(self.addtabButton,Qt.TopRightCorner)
-    self.mainLayout.addWidget(self.tabBarWidget)
+    def createTabBar(self):
+        print("Pyranha Browser - createTabBar: Creando barra de pestanias")
+        self.tabBarWidget = QTabWidget(self)
+        self.tabBarWidget.setMovable(True)
+        self.tabBarWidget.setTabsClosable(True)
+        self.tabBarWidget.currentChanged.connect(self.tabChanged)
+        self.tabBarWidget.tabCloseRequested.connect(self.closeTab)
+        self.addtabButton = QToolButton()
+        self.addtabButton.setIcon(QIcon('img/addTab.png'))
+        self.addtabButton.clicked.connect(lambda: self.createTab(self.default_url))
+        self.tabBarWidget.setCornerWidget(self.addtabButton,Qt.TopRightCorner)
+        self.mainLayout.addWidget(self.tabBarWidget)
 
-  def createTab(self, url):
-    self.tabLayout = QVBoxLayout()
-    self.tabLayout.setMargin(0)
-    self.tabLayout.setSpacing(0)
-    tab = QWidget()
-    tab.setLayout(self.tabLayout)
+    def createTab(self, url):
+        self.tabLayout = QVBoxLayout()
+        self.tabLayout.setMargin(0)
+        self.tabLayout.setSpacing(0)
+        tab = QWidget()
+        tab.setLayout(self.tabLayout)
 
-    #-- Creando NavBar
-    navBar = QWidget()
-    navBar.setMaximumHeight(27)
-    backButton = QToolButton()
-    backButton.setIcon(QIcon('img/goBack5.png'))
-    nextButton = QToolButton()
-    nextButton.setIcon(QIcon('img/goNext5.png'))
-    stopButton = QToolButton()
-    stopButton.setIcon(QIcon('img/stopLoad5.png'))
-    buttonGO = QToolButton()
-    buttonGO.setIcon(QIcon('img/goGo5.png'))
-    self.urlBox = QLineEdit()
+        #-- Creando NavBar
+        navBar = QWidget()
+        navBar.setMaximumHeight(27)
+        backButton = QToolButton()
+        backButton.setIcon(QIcon('img/goBack5.png'))
+        nextButton = QToolButton()
+        nextButton.setIcon(QIcon('img/goNext5.png'))
+        stopButton = QToolButton()
+        stopButton.setIcon(QIcon('img/stopLoad5.png'))
+        homeButton = QToolButton()
+        homeButton.setIcon(QIcon('img/webHome.png'))
+        buttonGO = QToolButton()
+        buttonGO.setIcon(QIcon('img/goGo5.png'))
+        self.urlBox = QLineEdit()
 
-    navBarLayout = QHBoxLayout()
-    navBarLayout.setMargin(0)
-    navBarLayout.setSpacing(0)
-    navBarLayout.addWidget(backButton)
-    navBarLayout.addWidget(nextButton)
-    navBarLayout.addWidget(stopButton)
-    navBarLayout.addWidget(self.urlBox)
-    navBarLayout.addWidget(buttonGO)
-    navBar.setLayout(navBarLayout)
-    
-    self.tabLayout.addWidget(navBar)
+        navBarLayout = QHBoxLayout()
+        navBarLayout.setMargin(0)
+        navBarLayout.setSpacing(0)
+        navBarLayout.addWidget(backButton)
+        navBarLayout.addWidget(nextButton)
+        navBarLayout.addWidget(stopButton)
+        navBarLayout.addWidget(homeButton)
+        navBarLayout.addWidget(self.urlBox)
+        navBarLayout.addWidget(buttonGO)
+        navBar.setLayout(navBarLayout)
+        
+        self.tabLayout.addWidget(navBar)
 
-    #-- Creando la vista Web
-    self.web = QWebView()
-    self.tabLayout.addWidget(self.web)
-    
-    #-- Signals
-    self.urlBox.returnPressed.connect(lambda: self.loadURL(self.web, self.urlBox.displayText()))
-    buttonGO.clicked.connect(lambda: self.loadURL(self.web, self.urlBox.displayText()))
-    backButton.clicked.connect(lambda: self.goBack(self.web, self.urlBox))
-    nextButton.clicked.connect(lambda: self.goBack(self.web, self.urlBox))
-    #stopButton.clicked.connect(self.stopLoad)
-    self.web.loadFinished.connect(lambda:self.loadFinished(self.web,self.urlBox))
-    self.web.linkClicked.connect(self.handleLinkClicked)
+        #-- Creando la vista Web
+        self.web = QWebView()
+        self.tabLayout.addWidget(self.web)
+        
+        #-- Signals
+        self.urlBox.returnPressed.connect(lambda: self.loadURL(self.web, self.urlBox.displayText()))
+        buttonGO.clicked.connect(lambda: self.loadURL(self.web, self.urlBox.displayText()))
+        backButton.clicked.connect(lambda: self.goBack(self.web, self.urlBox))
+        nextButton.clicked.connect(lambda: self.goBack(self.web, self.urlBox))
+        #stopButton.clicked.connect(self.stopLoad)
+        self.web.loadFinished.connect(lambda:self.loadFinished(self.web,self.urlBox))
+        self.web.linkClicked.connect(self.handleLinkClicked)
 
-    #web.urlChanged.connect(self.updateUrlBox)
-    #web.connect(web, QtCore.SIGNAL('loadFinished(bool)'), self.loadFinished)
-    self.tabBarWidget.setCurrentIndex(self.tabBarWidget.addTab(tab, 'Cargando...'))
-    self.web.load(QUrl(str(url)))
+        #web.urlChanged.connect(self.updateUrlBox)
+        #web.connect(web, QtCore.SIGNAL('loadFinished(bool)'), self.loadFinished)
+        self.tabBarWidget.setCurrentIndex(self.tabBarWidget.addTab(tab, 'Cargando...'))
+        self.web.load(QUrl(str(url)))
 
-    #Set Focus URL Box
-    self.urlBox.setFocus()
-    self.urlBox.selectAll()
+        #Set Focus URL Box
+        self.urlBox.setFocus()
+        self.urlBox.selectAll()
 
-  def centerWidget(self, layout, widget):
-    layout.setAlignment(widget, Qt.AlignCenter)
+    def centerWidget(self, layout, widget):
+        layout.setAlignment(widget, Qt.AlignCenter)
   
-  def closeTab(self, num):
-    self.tabBarWidget.removeTab(num)
+    def closeTab(self, num):
+        self.tabBarWidget.removeTab(num)
 
-  def tabChanged(self, num):
-    for child in self.tabBarWidget.widget(num).findChildren(QWebView):
-      self.setWindowTitle("Pyranha  " + child.title())
-      #for child in self.tabBarWidget.widget(num).findChildren(QLineEdit):
-      #self.focusURLBox(child)
+    def tabChanged(self, num):
+        for child in self.tabBarWidget.widget(num).findChildren(QWebView):
+            self.setWindowTitle("Pyranha  " + child.title())
+            #for child in self.tabBarWidget.widget(num).findChildren(QLineEdit):
+            #self.focusURLBox(child)
   
-  def loadFinished(self, web, urlBox):
-    print("Load Finished")
-    if web.url().host() != "":
-      urlBox.setText(web.url().scheme()+"://" + web.url().host())
-    else:
-      urlBox.setText("Inicio")
+    def loadFinished(self, web, urlBox):
+        print("Load Finished")
+        if web.url().host() != "":
+            urlBox.setText(web.url().scheme()+"://" + web.url().host())
+        else:
+            urlBox.setText("Inicio")
 
 
-    espacios = ""
+        espacios = ""
 
-    for child in self.tabBarWidget.currentWidget().findChildren(QWebView):
-        if len(child.title()) > 20:
-            str = child.title()[0:17] + "..."
-        elif len(child.title()) <= 20:
-            for x in range(1, 21 - len(child.title())):
-                espacios = espacios +" "
-            str = child.title()+espacios
-        self.setWindowTitle("Pyranha  " + child.title())
-        self.tabBarWidget.setTabText(self.tabBarWidget.currentIndex(),str)
+        for child in self.tabBarWidget.currentWidget().findChildren(QWebView):
+            if len(child.title()) > 20:
+                str = child.title()[0:17] + "..."
+            elif len(child.title()) <= 20:
+                for x in range(1, 21 - len(child.title())):
+                    espacios = espacios +" "
+                str = child.title()+espacios
+            self.setWindowTitle("Pyranha  " + child.title())
+            self.tabBarWidget.setTabText(self.tabBarWidget.currentIndex(),str)
 
-    #doc = web.page().mainFrame().documentElement()
+        #doc = web.page().mainFrame().documentElement()
 
-    web.page().mainFrame().evaluateJavaScript(self.jquery)
-    web.page().mainFrame().evaluateJavaScript(self.funcionesJs)
+        web.page().mainFrame().evaluateJavaScript(self.jquery)
+        web.page().mainFrame().evaluateJavaScript(self.funcionesJs)
 
     """inputCollection = doc.findAll("input")
 
@@ -247,79 +262,79 @@ class PyranhaBrowser(QMainWindow):
             print("FOCO---> "+h.toOuterXml())"""
 
 
-  def commandHandler(self,opc,extra):
-    if opc == 1:
-      if extra == '':
-        self.createTab(self.default_url)
-      else:
-        self.createTab(extra)
-    elif opc == 2:
-        self.loadHome()
-    elif opc == 3:
-        self.stop()
-    elif opc == 4:
-        self.reload()
-    elif opc == 5:
-        print(self.QUICK.get('Video'))
-        self.createTab(self.QUICK.get('Video'))
-    elif opc == 6:
-        self.createTab(self.QUICK.get('Music'))
-    elif opc == 7:
-        self.createTab(self.QUICK.get('Sport'))
-    else:
-        print "No hay comando reconocido"
+    def commandHandler(self,opc,extra):
+        if opc == 1:
+            if extra == '':
+                self.createTab(self.default_url)
+            else:
+                self.createTab(extra)
+        elif opc == 2:
+            self.loadHome()
+        elif opc == 3:
+            self.stop()
+        elif opc == 4:
+            self.reload()
+        elif opc == 5:
+            print(self.QUICK.get('Video'))
+            self.createTab(self.QUICK.get('Video'))
+        elif opc == 6:
+            self.createTab(self.QUICK.get('Music'))
+        elif opc == 7:
+            self.createTab(self.QUICK.get('Sport'))
+        else:
+            print "No hay comando reconocido"
 
   #----- NavBar Function -----#
 
-  def handleLinkClicked(self, url):
-    print(url.toString())
+    def handleLinkClicked(self, url):
+        print(url.toString())
 
 
-  def loadURL(self, web, text):
-    text = str(text)
-    if not text.startswith("http://") and not text.startswith("https://") and not text.startswith("~") and not os.path.isdir(text) and not text.startswith("file://") and not text.startswith("javascript:") and not text.startswith("about:"):
-      text = "http://" + text
-    if os.path.isdir(text):
-      text = "file://" + text
-      self.directoryLoader(text)
-    elif text.startswith("file://") and os.path.isdir(text.replace("file://","")):
-      self.directoryLoader(text)
-    elif text == "file://":
-      self.directoryLoader("file:///")
-    elif text == "~":
-      self.directoryLoader(os.path.expanduser("~"))
-    else:
-      web.load(QUrl(str(text)))
+    def loadURL(self, web, text):
+        text = str(text)
+        if not text.startswith("http://") and not text.startswith("https://") and not text.startswith("~") and not os.path.isdir(text) and not text.startswith("file://") and not text.startswith("javascript:") and not text.startswith("about:"):
+          text = "http://" + text
+        if os.path.isdir(text):
+          text = "file://" + text
+          self.directoryLoader(text)
+        elif text.startswith("file://") and os.path.isdir(text.replace("file://","")):
+          self.directoryLoader(text)
+        elif text == "file://":
+          self.directoryLoader("file:///")
+        elif text == "~":
+          self.directoryLoader(os.path.expanduser("~"))
+        else:
+          web.load(QUrl(str(text)))
 
-  def goBack(self, web, urlBox):
-      web.back()
-      #focusURLBox(urlbox)
+    def goBack(self, web, urlBox):
+        web.back()
+        #focusURLBox(urlbox)
 
-  def goNext(self, web, urlBox):
-      web.forward()
-      url = self.web.url()
-      url = url.toString()
-      url = str(url)
-      urlBox.setText(url)
-      self.focusURLBox(urlBox)
+    def goNext(self, web, urlBox):
+        web.forward()
+        url = self.web.url()
+        url = url.toString()
+        url = str(url)
+        urlBox.setText(url)
+        self.focusURLBox(urlBox)
       
-  def zoomOut(self):
-      self.web.setZoomFactor(self.web.zoomFactor()+.2)
+    def zoomOut(self):
+        self.web.setZoomFactor(self.web.zoomFactor()+.2)
   
-  def zoomIn(self):
-      self.web.setZoomFactor(self.web.zoomFactor()-.2)
+    def zoomIn(self):
+        self.web.setZoomFactor(self.web.zoomFactor()-.2)
 
-  def stopLoad(self):
-      self.web.stop()
+    def stopLoad(self):
+        self.web.stop()
 
-  def updateUrlBox(self):
-      url = self.web.url()
-      url = url.toString()
-      url = str(url)
-      self.urlBox.setText(url)
+    def updateUrlBox(self):
+        url = self.web.url()
+        url = url.toString()
+        url = str(url)
+        self.urlBox.setText(url)
 
   #---- set Style Css ----- #
-  def setCss(self):
+    def setCss(self):
       #-- Fondo:             #46483E
       #-- Fondo Oscuro:      #33342D
       #-- Objetos Verdes:    #8CC84B
@@ -499,3 +514,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
