@@ -121,36 +121,6 @@ class PyranhaBrowser(QMainWindow):
   
     def hideKeyboard(self):
         self.keyboard.hide()
-      
-    def showKeyboard(self):
-        self.keyboard.show()
-      
-    def onResize(self, event):
-        self.centerWidget(self.tabLayout, self.keyboard)
-
-    def loadHome(self):
-        self.createTab('preferences.html')
-      #self.createTab("https://www.google.com")
-      #self.createTab("https://www.facebook.com")
-      #self.createTab("http://www.ole.com.ar")
-      #self.createTab("http://www.tekoavirtual.chubut.edu.ar")
-      #self.createTab("http://www.chubut.edu.ar")
-
-  
-    def keyPressEvent(self, event):
-        if(event.isAutoRepeat()):
-            None
-        else:
-            if type(event) == QKeyEvent and event.key() == Qt.Key_AltGr: 
-                self.keyboard.click()
-            else:
-                try:
-                    QLineEdit.keyPressEvent(self.focusWidget(), event)
-                except TypeError:
-                    print("Ingresando caracter en widget no compatible")
-  
-    def hideKeyboard(self):
-        self.keyboard.hide()
 
     def showKeyboard(self):
         self.keyboard.show()
@@ -248,6 +218,7 @@ class PyranhaBrowser(QMainWindow):
 
     def loadFinished(self, web, urlBox):
         print("Load Finished")
+        print(web.url().host())
         if web.url().host() != "":
             urlBox.setText(web.url().scheme()+"://" + web.url().host())
         else:
@@ -264,12 +235,12 @@ class PyranhaBrowser(QMainWindow):
             self.setWindowTitle("Pyranha  " + child.title())
             self.tabBarWidget.setTabText(self.tabBarWidget.currentIndex(),str)
         
-        web.page().mainFrame().evaluateJavaScript(self.jquery)
-        web.page().mainFrame().evaluateJavaScript(self.funcionesJs)
+        #web.page().mainFrame().evaluateJavaScript(self.jquery)
+        #web.page().mainFrame().evaluateJavaScript(self.funcionesJs)
 
-        inputCollection = doc.findAll("input")
+        """inputCollection = doc.findAll("input")
 
-        inputList = inputCollection.toList()
+        #inputList = inputCollection.toList()
         t = []
         for we in inputList:
             print("---> "+we.toOuterXml())
@@ -289,7 +260,7 @@ class PyranhaBrowser(QMainWindow):
             print("Ejecutando JS A: "+h.toOuterXml())
 
             if h.hasFocus():
-                print("FOCO---> "+h.toOuterXml())
+                print("FOCO---> "+h.toOuterXml())"""
 
 
     def commandHandler(self,opc,extra):
@@ -324,22 +295,18 @@ class PyranhaBrowser(QMainWindow):
 
 
     def loadURL(self, web, text):
+        print("loadURL")
+        
+        text = str(text)
 
-        if 1 == 1:
-            text = str(text)
-            if not text.startswith("http://") and not text.startswith("https://") and not text.startswith("~") and not os.path.isdir(text) and not text.startswith("file://") and not text.startswith("javascript:") and not text.startswith("about:"):
-                text = "http://" + text
-            if os.path.isdir(text):
-                text = "file://" + text
-                self.directoryLoader(text)
-            elif text.startswith("file://") and os.path.isdir(text.replace("file://","")):
-                self.directoryLoader(text)
-            elif text == "file://":
-                self.directoryLoader("file:///")
-            elif text == "~":
-                self.directoryLoader(os.path.expanduser("~"))
-            else:
-                web.load(QUrl(str(text)))
+        print("Cargando: " + text)
+        if not text.startswith("http://") and not text.startswith("https://") and not text.startswith("~") and not os.path.isdir(text) and not text.startswith("file://") and not text.startswith("javascript:") and not text.startswith("about:"):
+            text = "http://" + text
+            web.load(QUrl(str(text)))
+        else:
+            web.load(QUrl(str(text)))
+        
+        self.updateUrlBox();
 
 
     def goBack(self, web, urlBox):
