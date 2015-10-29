@@ -15,6 +15,9 @@ from vox import Vox
 from hand import Hand
 from PyranhaSqliteHandler import *
 
+from lxml import etree
+
+
 JQUERY_URL = 'http://code.jquery.com/jquery-1.11.0.min.js'
 JQUERY_FILE = JQUERY_URL.split('/')[-1]
 JQUERY_PATH = os.path.join(os.path.dirname(__file__), JQUERY_FILE)
@@ -40,19 +43,29 @@ def getFuncionesJs():
     return js
 
 class PyranhaBrowser(QMainWindow):
-    COMMAND = ['inicio','pesta','detener','recarga','video','musica','deporte','noticias']
+
+    COMMAND = ['inicio','pesta','detener','recarga','video','musica','deporte']
     QUICK = {}
-    WIDTH = 1024
-    HEIGHT = 800
-    
+    width = 0
+    height = 0
+  
     def __init__(self):
         QMainWindow.__init__(self)
-        print("Pyranha Browser: Iniciando Navegador (" + str(self.WIDTH) + " - " + str(self.HEIGHT) + " )")
-        self.resize(self.WIDTH, self.HEIGHT)
-        self.setWindowIcon(QIcon('img/logo5.png'))
-        self.setWindowTitle('Pyranha Browser')
-        self.default_url="http://www.google.com.ar"
-        print("Pyranha Browser: Default URL " + self.default_url)
+        
+        #----------------- Configurando desde el archivo ---------------#
+        config = etree.parse('config.xml')
+        #-- configurando Browser
+        browser_cfg = config.find('browser')
+        self.width = int(browser_cfg.findtext('width'))
+        self.height = int(browser_cfg.findtext('height'))
+        self.resize(self.width, self.height)
+        self.setWindowIcon(QIcon(browser_cfg.findtext('windows_icon')))
+        self.setWindowTitle(browser_cfg.findtext('windows_tittle'))
+        self.default_url=browser_cfg.findtext('home')
+        #-- configurando Teclado
+        self.keyboard_cfg = config.find('keyboard')
+        #----------------------------------------------------------------#
+
         self.initGui()
         self.voice = Vox()
         self.handDetector = Hand()
@@ -66,6 +79,7 @@ class PyranhaBrowser(QMainWindow):
         
     
     def initQuick(self):
+
         """ Metodo que toma de la base de datos SQLITE los sitios favoritos. Estos estan clasificados por categorias
         es entonces que cargandose en QUICK el usuario podra utilizar los comandos por VOZ llamando a las categorias
         (deporte, musica, video, noticias, etc)
@@ -91,7 +105,8 @@ class PyranhaBrowser(QMainWindow):
         self.centerWidget(self.mainLayout, self.keyboard)
         self.setCss()
         self.setCentralWidget(self.centralwidget)
-        
+
+      
     def keyPressEvent(self, event):
         if(event.isAutoRepeat()):
             None
@@ -203,6 +218,7 @@ class PyranhaBrowser(QMainWindow):
 
     def loadFinished(self, web, urlBox):
         print("Load Finished")
+        print(web.url().host())
         if web.url().host() != "":
             urlBox.setText(web.url().scheme()+"://" + web.url().host())
         else:
@@ -219,14 +235,12 @@ class PyranhaBrowser(QMainWindow):
             self.setWindowTitle("Pyranha  " + child.title())
             self.tabBarWidget.setTabText(self.tabBarWidget.currentIndex(),str)
         
-        #doc = web.page().mainFrame().documentElement()
-
-        web.page().mainFrame().evaluateJavaScript(self.jquery)
-        web.page().mainFrame().evaluateJavaScript(self.funcionesJs)
+        #web.page().mainFrame().evaluateJavaScript(self.jquery)
+        #web.page().mainFrame().evaluateJavaScript(self.funcionesJs)
 
         """inputCollection = doc.findAll("input")
 
-        inputList = inputCollection.toList()
+        #inputList = inputCollection.toList()
         t = []
         for we in inputList:
             print("---> "+we.toOuterXml())
@@ -250,8 +264,8 @@ class PyranhaBrowser(QMainWindow):
 
 
     def commandHandler(self,opc,extra):
-        """Este metodo tiene por fin controlar los comandos, cada entero representa una accion que se realizara
-        cuando se envie una senial desde el manejador de voces."""
+        
+
         if opc == 1:
             if extra == '':
                 self.createTab(self.default_url)
@@ -276,27 +290,24 @@ class PyranhaBrowser(QMainWindow):
             print "No hay comando reconocido"
 
     #----- NavBar Function -----#
-
     def handleLinkClicked(self, url):
         print(url.toString())
 
 
     def loadURL(self, web, text):
-        if 1 == 1:
-            text = str(text)
-            if not text.startswith("http://") and not text.startswith("https://") and not text.startswith("~") and not os.path.isdir(text) and not text.startswith("file://") and not text.startswith("javascript:") and not text.startswith("about:"):
-                text = "http://" + text
-            if os.path.isdir(text):
-                text = "file://" + text
-                self.directoryLoader(text)
-            elif text.startswith("file://") and os.path.isdir(text.replace("file://","")):
-                self.directoryLoader(text)
-            elif text == "file://":
-                self.directoryLoader("file:///")
-            elif text == "~":
-                self.directoryLoader(os.path.expanduser("~"))
-            else:
-                web.load(QUrl(str(text)))
+        print("loadURL")
+        
+        text = str(text)
+
+        print("Cargando: " + text)
+        if not text.startswith("http://") and not text.startswith("https://") and not text.startswith("~") and not os.path.isdir(text) and not text.startswith("file://") and not text.startswith("javascript:") and not text.startswith("about:"):
+            text = "http://" + text
+            web.load(QUrl(str(text)))
+        else:
+            web.load(QUrl(str(text)))
+        
+        self.updateUrlBox();
+
 
     def goBack(self, web, urlBox):
         web.back()
@@ -309,7 +320,7 @@ class PyranhaBrowser(QMainWindow):
         url = str(url)
         urlBox.setText(url)
         self.focusURLBox(urlBox)
-        
+
     def zoomOut(self):
         self.web.setZoomFactor(self.web.zoomFactor()+.2)
     
@@ -324,6 +335,7 @@ class PyranhaBrowser(QMainWindow):
         url = url.toString()
         url = str(url)
         self.urlBox.setText(url)
+
 
     #---- set Style Css ----- #
     def setCss(self):
@@ -495,8 +507,6 @@ class PyranhaBrowser(QMainWindow):
 
 
 
-
-
 # ///////////////////////////////////////////////////////////////////////////////////////////////#
 # MAIN
 # ///////////////////////////////////////////////////////////////////////////////////////////////#
@@ -508,3 +518,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

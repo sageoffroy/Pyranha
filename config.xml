@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE Edit_Mensaje SYSTEM "Edit_Mensaje.dtd">
+
+<config>
+  <browser>
+    <windows_icon>img/logo_pyranha.png</windows_icon>
+    <windows_tittle>Pyranha</windows_tittle>
+    <home>index/prueba.html</home>
+    <width>1600</width>
+    <height>900</height>
+  </browser>
+  <keyboard>
+    <time_controller>1000</time_controller>
+    <is_sortable>True</is_sortable>
+    <mouse_speed>8</mouse_speed>
+  </keyboard>
+</config>
