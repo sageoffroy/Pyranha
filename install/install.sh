@@ -1,6 +1,6 @@
 #!/bin/bash
 echo "Instalando librerias"
-apt-get install python-pip python-opencv python-qt4 python-pyaudio python-requests python-numpy python-xlib sqlite3 python-pyglet
+apt-get install python-pip python-opencv python-qt4 python-pyaudio python-requests python-numpy python-xlib sqlite3 python-pyglet lxml python-pygame
 echo 's'
 #pip install pyglet
 
